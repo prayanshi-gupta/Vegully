@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cart — Vegully</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+<!-- ════════ NAVBAR ════════ -->
+<nav class="navbar" id="navbar"></nav>
+<script src="data.js"></script>
+<script>renderNavbar('cart');</script>
+
+
+<!-- ════════ PAGE HEADER ════════ -->
+<div class="page-header">
+  <div class="container">
+    <h1>Your <span class="grad-text">Cart</span></h1>
+    <p>Review your items and proceed to checkout.</p>
+  </div>
+</div>
+
+<!-- ════════ CART LAYOUT ════════ -->
+<div class="container">
+  <div id="cartPageContent"></div>
+</div>
+
+<!-- ════════ FOOTER ════════ -->
+<footer class="footer" style="margin-top:60px">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><span class="logo-icon">🥦</span>Vegully</div>
+        <p>Your premium grocery partner. Fresh produce, lightning-fast delivery, every day in 2026.</p>
+        <div class="socials">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <ul><li><a href="index.html">Home</a></li><li><a href="shop.html">Shop</a></li><li><a href="orders.html">My Orders</a></li><li><a href="profile.html">Profile</a></li></ul>
+      </div>
+      <div class="footer-links">
+        <h4>Categories</h4>
+        <ul><li><a href="shop.html?cat=fruits">Fruits</a></li><li><a href="shop.html?cat=vegetables">Vegetables</a></li><li><a href="shop.html?cat=dairy">Dairy</a></li><li><a href="shop.html?cat=bakery">Bakery</a></li></ul>
+      </div>
+      <div class="footer-links">
+        <h4>Support</h4>
+        <ul><li><a href="#">Help Center</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li><li><a href="#">Contact Us</a></li></ul>
+      </div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 Vegully. All rights reserved. Made with ❤️ for fresh living.</p></div>
+  </div>
+</footer>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+(function(){
+  var couponApplied = false;
+  var discountAmount = 0;
+
+  function renderCart(){
+    var cart = getCart();
+    var content = document.getElementById('cartPageContent');
+
+    if(cart.length === 0){
+      content.innerHTML =
+        '<div class="empty-cart" style="padding:100px 20px;text-align:center;">' +
+          '<i class="fas fa-shopping-basket" style="font-size:4rem;color:var(--text3);display:block;margin-bottom:20px;"></i>' +
+          '<h2 style="font-family:var(--font-h);margin-bottom:12px;">Your cart is empty</h2>' +
+          '<p style="color:var(--text2);margin-bottom:28px;">Looks like you haven\'t added anything yet. Let\'s fix that!</p>' +
+          '<a href="shop.html" class="btn btn-primary"><i class="fas fa-store"></i> Browse Products</a>' +
+        '</div>';
+      return;
+    }
+
+    var subtotal = getCartTotal();
+    var delivery = subtotal >= 499 ? 0 : 29;
+    var tax      = Math.round(subtotal * 0.05);
+    var total    = subtotal + delivery + tax - discountAmount;
+
+    var itemsHTML = cart.map(function(item){
+      return '<div class="cart-item" id="ci-'+item.id+'">' +
+        '<div class="cart-item-img"><img src="'+item.image+'" alt="'+item.name+'" loading="lazy" onerror="this.src=\'https://images.unsplash.com/photo-1542838132-92c53300491e?w=200&auto=format&fit=crop&q=60\'"/></div>' +
+        '<div class="cart-item-info">' +
+          '<div class="cart-item-name">'+item.name+'</div>' +
+          '<div class="cart-item-unit">'+item.unit+'</div>' +
+        '</div>' +
+        '<div class="qty-control">' +
+          '<button class="qty-btn" onclick="changeQty('+item.id+',-1)"><i class="fas fa-minus"></i></button>' +
+          '<span class="qty-val">'+item.qty+'</span>' +
+          '<button class="qty-btn" onclick="changeQty('+item.id+',1)"><i class="fas fa-plus"></i></button>' +
+        '</div>' +
+        '<div class="cart-item-price">₹'+( item.price * item.qty )+'</div>' +
+        '<button class="cart-remove" onclick="deleteItem('+item.id+')" aria-label="Remove item"><i class="fas fa-times"></i></button>' +
+      '</div>';
+    }).join('');
+
+    content.innerHTML =
+      '<div class="cart-layout">' +
+        '<div>' +
+          '<div class="cart-items-wrap">'+itemsHTML+'</div>' +
+          '<div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">' +
+            '<a href="shop.html" class="btn btn-ghost btn-sm"><i class="fas fa-arrow-left"></i> Continue Shopping</a>' +
+            '<button class="btn btn-danger btn-sm" onclick="clearEntireCart()"><i class="fas fa-trash"></i> Clear Cart</button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="cart-summary">' +
+          '<div class="summary-title">Order Summary</div>' +
+          '<div class="summary-row"><span>Subtotal ('+ cart.length +' items)</span><span>₹'+subtotal+'</span></div>' +
+          '<div class="summary-row"><span>Delivery Fee</span><span>'+(delivery===0?'<span style="color:var(--accent);font-weight:700">FREE</span>':'₹'+delivery)+'</span></div>' +
+          '<div class="summary-row"><span>Tax (5%)</span><span>₹'+tax+'</span></div>' +
+          (discountAmount>0?'<div class="summary-row" style="color:var(--accent)"><span>Coupon Discount</span><span>–₹'+discountAmount+'</span></div>':'') +
+          '<div class="summary-row total"><span>Total</span><span>₹'+total+'</span></div>' +
+          '<div class="coupon-row">' +
+            '<input type="text" id="couponInput" placeholder="Enter coupon code" value="'+(couponApplied?'VEGULLY20':'')+'"/>' +
+            '<button class="btn btn-outline btn-sm" onclick="applyCoupon()">'+(couponApplied?'Applied ✓':'Apply')+'</button>' +
+          '</div>' +
+          (subtotal < 499 ? '<p style="font-size:0.78rem;color:var(--text3);margin-bottom:12px;"><i class="fas fa-info-circle"></i> Add ₹'+(499-subtotal)+' more for free delivery</p>' : '') +
+          '<a href="checkout.html" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px"><i class="fas fa-lock"></i> Proceed to Checkout</a>' +
+          '<div style="text-align:center;margin-top:14px;font-size:0.78rem;color:var(--text3)"><i class="fas fa-shield-alt"></i> 100% secure & encrypted checkout</div>' +
+        '</div>' +
+      '</div>';
+  }
+
+  window.changeQty = function(id, delta){
+    var cart = getCart();
+    var idx  = cart.findIndex(function(i){return i.id===id;});
+    if(idx === -1) return;
+    var newQty = cart[idx].qty + delta;
+    if(newQty <= 0){
+      removeFromCart(id);
+    } else {
+      updateQty(id, newQty);
+    }
+    renderCart();
+  };
+
+  window.deleteItem = function(id){
+    var el = document.getElementById('ci-'+id);
+    if(el){ el.style.opacity='0'; el.style.transform='translateX(40px)'; el.style.transition='all 0.3s'; }
+    setTimeout(function(){ removeFromCart(id); renderCart(); }, 300);
+    showToast('Item removed from cart','info');
+  };
+
+  window.clearEntireCart = function(){
+    saveCart([]);
+    updateCartBadge();
+    renderCart();
+    showToast('Cart cleared','info');
+  };
+
+  window.applyCoupon = function(){
+    var code = document.getElementById('couponInput');
+    if(!code) return;
+    if(code.value.trim().toUpperCase() === 'VEGULLY20'){
+      if(!couponApplied){
+        discountAmount = Math.round(getCartTotal() * 0.20);
+        couponApplied  = true;
+        showToast('🎉 Coupon applied! 20% off','success');
+        renderCart();
+      } else {
+        showToast('Coupon already applied','info');
+      }
+    } else {
+      showToast('❌ Invalid coupon code','error');
+    }
+  };
+
+  renderCart();
+})();
+</script>
+</body>
+</html>

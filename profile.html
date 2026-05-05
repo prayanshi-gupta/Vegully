@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Profile — Vegully</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    .profile-layout{display:grid;grid-template-columns:300px 1fr;gap:36px;padding:60px 0 80px;}
+    .profile-card{background:var(--surface);border-radius:var(--radius-xl);border:1px solid var(--border);padding:40px 28px;text-align:center;height:fit-content;position:sticky;top:88px;box-shadow:var(--shadow-sm);}
+    .avatar-wrap{position:relative;display:inline-block;margin-bottom:20px;}
+    .avatar-img{width:100px;height:100px;border-radius:50%;object-fit:cover;border:4px solid var(--accent);box-shadow:0 0 0 8px rgba(var(--accent-rgb),0.12);}
+    .avatar-badge{position:absolute;bottom:2px;right:2px;width:28px;height:28px;border-radius:50%;background:var(--grad);border:3px solid var(--surface);display:flex;align-items:center;justify-content:center;font-size:0.72rem;color:#fff;}
+    .profile-name{font-family:var(--font-h);font-size:1.3rem;font-weight:800;margin-bottom:6px;}
+    .profile-email{font-size:0.85rem;color:var(--text3);margin-bottom:14px;}
+    .profile-tag{display:inline-block;background:rgba(var(--accent-rgb),0.12);color:var(--accent);font-size:0.78rem;font-weight:700;padding:5px 14px;border-radius:99px;letter-spacing:0.5px;margin-bottom:24px;}
+    .profile-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px;}
+    .p-stat{background:var(--bg2);border-radius:var(--radius-sm);padding:14px;text-align:center;border:1px solid var(--border);}
+    .p-stat strong{display:block;font-family:var(--font-h);font-size:1.25rem;font-weight:800;color:var(--accent);}
+    .p-stat span{font-size:0.7rem;color:var(--text3);}
+    .profile-nav{margin-top:24px;display:flex;flex-direction:column;gap:6px;}
+    .profile-nav-btn{display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:var(--radius-sm);font-size:0.9rem;font-weight:500;color:var(--text2);background:none;border:1px solid transparent;cursor:pointer;transition:var(--t);text-align:left;width:100%;font-family:var(--font-b);}
+    .profile-nav-btn:hover,.profile-nav-btn.active{background:rgba(var(--accent-rgb),0.10);color:var(--accent);border-color:rgba(var(--accent-rgb),0.20);}
+    .profile-nav-btn i{width:18px;text-align:center;}
+    .profile-nav-btn.danger{color:var(--red);}
+    .profile-nav-btn.danger:hover{background:#fee2e2;border-color:#fecaca;color:var(--red);}
+    .profile-main{display:flex;flex-direction:column;gap:22px;}
+    .profile-section-card{background:var(--surface);border-radius:var(--radius-lg);border:1px solid var(--border);padding:30px;box-shadow:var(--shadow-sm);}
+    .psc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+    .psc-header h3{font-family:var(--font-h);font-size:1.05rem;font-weight:700;}
+    .info-row{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);}
+    .info-row:last-child{border-bottom:none;padding-bottom:0;}
+    .info-icon{width:38px;height:38px;border-radius:50%;background:rgba(var(--accent-rgb),0.10);display:flex;align-items:center;justify-content:center;color:var(--accent);flex-shrink:0;}
+    .info-label{font-size:0.75rem;color:var(--text3);margin-bottom:2px;}
+    .info-val{font-size:0.92rem;font-weight:500;}
+    .addr-card{background:var(--bg2);border-radius:var(--radius);border:1.5px solid var(--border);padding:18px 20px;margin-bottom:12px;transition:var(--t);position:relative;}
+    .addr-card:hover{border-color:var(--accent);}
+    .addr-card.default-addr{border-color:var(--accent);}
+    .addr-default-badge{position:absolute;top:12px;right:12px;background:rgba(var(--accent-rgb),0.12);color:var(--accent);font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:99px;}
+    .addr-name{font-weight:700;font-size:0.92rem;margin-bottom:4px;}
+    .addr-text{font-size:0.85rem;color:var(--text2);line-height:1.5;}
+    .addr-phone{font-size:0.82rem;color:var(--text3);margin-top:4px;}
+    .pref-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);}
+    .pref-row:last-child{border-bottom:none;}
+    .pref-label{font-size:0.92rem;font-weight:500;}
+    .pref-sub{font-size:0.78rem;color:var(--text3);}
+    .toggle-switch{position:relative;width:44px;height:24px;cursor:pointer;flex-shrink:0;}
+    .toggle-switch input{opacity:0;width:0;height:0;}
+    .toggle-slider{position:absolute;inset:0;background:var(--border);border-radius:99px;transition:var(--t);}
+    .toggle-slider:before{content:'';position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;top:3px;left:3px;transition:var(--t);box-shadow:0 1px 4px rgba(0,0,0,0.2);}
+    .toggle-switch input:checked+.toggle-slider{background:var(--accent);}
+    .toggle-switch input:checked+.toggle-slider:before{transform:translateX(20px);}
+    .section-hidden{display:none;}
+    @media(max-width:900px){.profile-layout{grid-template-columns:1fr;}.profile-card{position:static;}}
+  </style>
+</head>
+<body>
+
+<!-- ════════ NAVBAR ════════ -->
+<nav class="navbar" id="navbar"></nav>
+<script src="data.js"></script>
+<script>renderNavbar('profile');</script>
+
+<div class="page-header">
+  <div class="container">
+    <h1>My <span class="grad-text">Profile</span></h1>
+    <p>Manage your account, addresses and preferences.</p>
+  </div>
+</div>
+
+<div class="container" id="profileRoot"></div>
+
+<footer class="footer" style="margin-top:0">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <svg class="logo-svg" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="bgl2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#4dde82"/><stop offset="100%" stop-color="#1a7a40"/></linearGradient></defs>
+            <circle cx="26" cy="26" r="26" fill="url(#bgl2)"/>
+            <path d="M13 22h26l-3 14H16L13 22Z" fill="white" fill-opacity="0.95"/>
+            <path d="M18 22 C18 14 22 10 26 10" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <path d="M34 22 C34 14 30 10 26 10" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <line x1="22" y1="22" x2="21" y2="36" stroke="#27a85a" stroke-width="1.5"/>
+            <line x1="26" y1="22" x2="26" y2="36" stroke="#27a85a" stroke-width="1.5"/>
+            <line x1="30" y1="22" x2="31" y2="36" stroke="#27a85a" stroke-width="1.5"/>
+          </svg>
+          <span class="logo-wordmark">Vegully</span>
+        </div>
+        <p>Your premium grocery partner. Fresh produce, lightning-fast delivery, every day in 2026.</p>
+        <div class="socials">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+      <div class="footer-links"><h4>Quick Links</h4><ul><li><a href="index.html">Home</a></li><li><a href="shop.html">Shop</a></li><li><a href="orders.html">My Orders</a></li><li><a href="wishlist.html">Wishlist</a></li></ul></div>
+      <div class="footer-links"><h4>Vendors</h4><ul><li><a href="vendors.html">Our Vendors</a></li><li><a href="vendor-signup.html">Become a Vendor</a></li></ul></div>
+      <div class="footer-links"><h4>Support</h4><ul><li><a href="help.html">Help Center</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 Vegully. All rights reserved. Made with ❤️ for fresh living.</p></div>
+  </div>
+</footer>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+(function () {
+
+  /* ── helpers ── */
+  function getUser() {
+    try { return JSON.parse(localStorage.getItem('vegully_user') || 'null'); } catch(e){ return null; }
+  }
+  function saveUserProfile(data) {
+    var user = getUser() || {};
+    Object.keys(data).forEach(function(k){ user[k] = data[k]; });
+    localStorage.setItem('vegully_user', JSON.stringify(user));
+  }
+
+  var root = document.getElementById('profileRoot');
+  var user = getUser();
+
+  /* ── Not logged in ── */
+  if (!user) {
+    root.innerHTML =
+      '<div style="text-align:center;padding:100px 20px;">'+
+        '<i class="fas fa-user-lock" style="font-size:3.5rem;color:var(--text3);display:block;margin-bottom:20px;"></i>'+
+        '<h2 style="font-family:var(--font-h);margin-bottom:12px;">You are not signed in</h2>'+
+        '<p style="color:var(--text2);margin-bottom:24px;">Please sign in to view and manage your profile.</p>'+
+        '<a href="login.html" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> Sign In</a>'+
+      '</div>';
+    return;
+  }
+
+  /* ── Stats ── */
+  var orderCount    = getOrders().length;
+  var wishlistCount = getWishlist().length;
+  var totalSpent    = getOrders().reduce(function(s,o){ return s + (o.total||0); }, 0);
+
+  /* ── Displayed values (from localStorage) ── */
+  function val(k, fallback) { return user[k] || fallback || ''; }
+  var displayName   = (val('firstName') + ' ' + val('lastName')).trim();
+  var displayAvatar = val('avatar', 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&auto=format&fit=crop&q=80');
+
+  /* ── Build HTML ── */
+  root.innerHTML =
+    '<div class="profile-layout">'+
+
+    /* SIDEBAR */
+    '<div class="profile-card">'+
+      '<div class="avatar-wrap">'+
+        '<img class="avatar-img" id="sidebarAvatar" src="'+displayAvatar+'" alt="avatar"/>'+
+        '<div class="avatar-badge"><i class="fas fa-check"></i></div>'+
+      '</div>'+
+      '<div class="profile-name" id="sidebarName">'+(displayName||'Your Name')+'</div>'+
+      '<div class="profile-email" id="sidebarEmail">'+(val('email')||'')+'</div>'+
+      '<span class="profile-tag">⭐ Premium Member</span>'+
+      '<div style="font-size:0.8rem;color:var(--text3);margin-bottom:4px;">Member since January 2026</div>'+
+      '<div class="profile-stats">'+
+        '<div class="p-stat"><strong>'+orderCount+'</strong><span>Orders</span></div>'+
+        '<div class="p-stat"><strong>₹'+totalSpent+'</strong><span>Total Spent</span></div>'+
+        '<div class="p-stat"><strong>2</strong><span>Addresses</span></div>'+
+        '<div class="p-stat"><strong>'+wishlistCount+'</strong><span>Wishlist</span></div>'+
+      '</div>'+
+      '<div class="profile-nav">'+
+        '<button class="profile-nav-btn active" data-section="info"><i class="fas fa-user"></i> Personal Info</button>'+
+        '<button class="profile-nav-btn" data-section="addresses"><i class="fas fa-map-marker-alt"></i> Saved Addresses</button>'+
+        '<button class="profile-nav-btn" data-section="orders-mini"><i class="fas fa-box"></i> My Orders</button>'+
+        '<button class="profile-nav-btn" data-section="preferences"><i class="fas fa-cog"></i> Preferences</button>'+
+        '<button class="profile-nav-btn" data-section="security"><i class="fas fa-shield-alt"></i> Security</button>'+
+        '<a href="wishlist.html" class="profile-nav-btn" style="text-decoration:none"><i class="fas fa-heart"></i> Wishlist</a>'+
+        '<a href="vendors.html" class="profile-nav-btn" style="text-decoration:none"><i class="fas fa-store"></i> Our Vendors</a>'+
+        '<button class="profile-nav-btn danger" id="sidebarSignOut"><i class="fas fa-sign-out-alt"></i> Sign Out</button>'+
+      '</div>'+
+    '</div>'+
+
+    /* MAIN */
+    '<div class="profile-main">'+
+
+      /* PERSONAL INFO */
+      '<div class="profile-section-card" id="section-info">'+
+        '<div class="psc-header">'+
+          '<h3><i class="fas fa-user" style="color:var(--accent);margin-right:8px"></i>Personal Information</h3>'+
+          '<button class="btn btn-outline btn-sm" id="editInfoBtn"><i class="fas fa-pen"></i> Edit</button>'+
+        '</div>'+
+        /* view */
+        '<div id="infoView">'+
+          '<div class="info-row"><div class="info-icon"><i class="fas fa-user"></i></div><div><div class="info-label">Full Name</div><div class="info-val" id="viewName">'+(displayName||'—')+'</div></div></div>'+
+          '<div class="info-row"><div class="info-icon"><i class="fas fa-envelope"></i></div><div><div class="info-label">Email Address</div><div class="info-val" id="viewEmail">'+(val('email')||'—')+'</div></div></div>'+
+          '<div class="info-row"><div class="info-icon"><i class="fas fa-phone"></i></div><div><div class="info-label">Phone Number</div><div class="info-val" id="viewPhone">'+(val('phone')||'Not set')+'</div></div></div>'+
+          '<div class="info-row"><div class="info-icon"><i class="fas fa-birthday-cake"></i></div><div><div class="info-label">Date of Birth</div><div class="info-val" id="viewDob">'+(val('dob')||'Not set')+'</div></div></div>'+
+          '<div class="info-row"><div class="info-icon"><i class="fas fa-venus-mars"></i></div><div><div class="info-label">Gender</div><div class="info-val" id="viewGender">'+(val('gender')||'Not set')+'</div></div></div>'+
+        '</div>'+
+        /* edit */
+        '<div id="infoEdit" style="display:none">'+
+          '<div class="form-grid">'+
+            '<div class="form-group"><label>First Name *</label><input type="text" id="editFirstName" value="'+val('firstName')+'" placeholder="First name"/></div>'+
+            '<div class="form-group"><label>Last Name</label><input type="text" id="editLastName" value="'+val('lastName')+'" placeholder="Last name"/></div>'+
+            '<div class="form-group"><label>Email *</label><input type="email" id="editEmail" value="'+val('email')+'" placeholder="your@email.com"/></div>'+
+            '<div class="form-group"><label>Phone</label><input type="tel" id="editPhone" value="'+val('phone')+'" placeholder="+91 98765 43210"/></div>'+
+            '<div class="form-group"><label>Date of Birth</label><input type="date" id="editDob" value="'+val('dob')+'"/></div>'+
+            '<div class="form-group"><label>Gender</label>'+
+              '<select id="editGender">'+
+                '<option value="">Prefer not to say</option>'+
+                '<option value="Male"'+(val('gender')==='Male'?' selected':'')+'>Male</option>'+
+                '<option value="Female"'+(val('gender')==='Female'?' selected':'')+'>Female</option>'+
+                '<option value="Non-binary"'+(val('gender')==='Non-binary'?' selected':'')+'>Non-binary</option>'+
+              '</select>'+
+            '</div>'+
+          '</div>'+
+          '<div style="display:flex;gap:12px;margin-top:22px;">'+
+            '<button class="btn btn-primary btn-sm" id="saveInfoBtn"><i class="fas fa-save"></i> Save Changes</button>'+
+            '<button class="btn btn-ghost btn-sm" id="cancelInfoBtn">Cancel</button>'+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+
+      /* SAVED ADDRESSES */
+      '<div class="profile-section-card section-hidden" id="section-addresses">'+
+        '<div class="psc-header">'+
+          '<h3><i class="fas fa-map-marker-alt" style="color:var(--accent);margin-right:8px"></i>Saved Addresses</h3>'+
+          '<button class="btn btn-outline btn-sm" onclick="showToast(\'Address form coming soon!\',\'info\')"><i class="fas fa-plus"></i> Add New</button>'+
+        '</div>'+
+        '<div class="addr-card default-addr">'+
+          '<span class="addr-default-badge">Default</span>'+
+          '<div class="addr-name">Home</div>'+
+          '<div class="addr-text">Flat 4B, Sunrise Apartments, MG Road, Indiranagar, Bangalore – 560038</div>'+
+          '<div class="addr-phone"><i class="fas fa-phone" style="color:var(--accent)"></i> '+val('phone', 'Not set')+'</div>'+
+          '<div style="margin-top:12px"><button class="btn btn-ghost btn-sm" onclick="showToast(\'Edit address\',\'info\')"><i class="fas fa-pen"></i> Edit</button></div>'+
+        '</div>'+
+        '<div class="addr-card">'+
+          '<div class="addr-name">Office</div>'+
+          '<div class="addr-text">Level 12, Prestige Tech Park, Outer Ring Road, Marathahalli, Bangalore – 560103</div>'+
+          '<div style="margin-top:12px;display:flex;gap:8px;">'+
+            '<button class="btn btn-ghost btn-sm" onclick="showToast(\'Edit address\',\'info\')"><i class="fas fa-pen"></i> Edit</button>'+
+            '<button class="btn btn-danger btn-sm" onclick="showToast(\'Address removed\',\'info\')"><i class="fas fa-trash"></i> Remove</button>'+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+
+      /* MY ORDERS */
+      '<div class="profile-section-card section-hidden" id="section-orders-mini">'+
+        '<div class="psc-header">'+
+          '<h3><i class="fas fa-box" style="color:var(--accent);margin-right:8px"></i>Recent Orders</h3>'+
+          '<a href="orders.html" class="btn btn-outline btn-sm">View All</a>'+
+        '</div>'+
+        '<div id="miniOrders"></div>'+
+      '</div>'+
+
+      /* PREFERENCES */
+      '<div class="profile-section-card section-hidden" id="section-preferences">'+
+        '<div class="psc-header"><h3><i class="fas fa-cog" style="color:var(--accent);margin-right:8px"></i>Preferences</h3></div>'+
+        '<div class="pref-row"><div><div class="pref-label">Email Notifications</div><div class="pref-sub">Order updates and offers via email</div></div><label class="toggle-switch"><input type="checkbox" checked/><span class="toggle-slider"></span></label></div>'+
+        '<div class="pref-row"><div><div class="pref-label">SMS Alerts</div><div class="pref-sub">Delivery updates via SMS</div></div><label class="toggle-switch"><input type="checkbox" checked/><span class="toggle-slider"></span></label></div>'+
+        '<div class="pref-row"><div><div class="pref-label">Push Notifications</div><div class="pref-sub">Flash sales and deals</div></div><label class="toggle-switch"><input type="checkbox"/><span class="toggle-slider"></span></label></div>'+
+        '<div class="pref-row"><div><div class="pref-label">Dark Mode</div><div class="pref-sub">Switch between light and dark themes</div></div><label class="toggle-switch"><input type="checkbox" id="darkTogglePref"/><span class="toggle-slider"></span></label></div>'+
+        '<div class="pref-row"><div><div class="pref-label">Promotional Emails</div><div class="pref-sub">Weekly deals and exclusive offers</div></div><label class="toggle-switch"><input type="checkbox" checked/><span class="toggle-slider"></span></label></div>'+
+      '</div>'+
+
+      /* SECURITY */
+      '<div class="profile-section-card section-hidden" id="section-security">'+
+        '<div class="psc-header"><h3><i class="fas fa-shield-alt" style="color:var(--accent);margin-right:8px"></i>Security Settings</h3></div>'+
+        '<div class="form-group" style="margin-bottom:16px"><label>Current Password</label><input type="password" placeholder="••••••••"/></div>'+
+        '<div class="form-group" style="margin-bottom:16px"><label>New Password</label><input type="password" placeholder="Min. 8 characters"/></div>'+
+        '<div class="form-group" style="margin-bottom:24px"><label>Confirm New Password</label><input type="password" placeholder="Re-enter password"/></div>'+
+        '<button class="btn btn-primary btn-sm" onclick="showToast(\'✅ Password updated!\',\'success\')"><i class="fas fa-lock"></i> Update Password</button>'+
+        '<div style="margin-top:28px;padding-top:20px;border-top:1px solid var(--border)">'+
+          '<div class="pref-row" style="border:none;padding:0">'+
+            '<div><div class="pref-label">Two-Factor Authentication</div><div class="pref-sub">Extra layer of account security</div></div>'+
+            '<label class="toggle-switch"><input type="checkbox"/><span class="toggle-slider"></span></label>'+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+
+    '</div>'+ /* end profile-main */
+    '</div>'; /* end profile-layout */
+
+  /* ── Section switching ── */
+  document.querySelectorAll('.profile-nav-btn[data-section]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.profile-nav-btn').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      document.querySelectorAll('.profile-section-card').forEach(function(s){ s.classList.add('section-hidden'); });
+      var sec = document.getElementById('section-' + btn.dataset.section);
+      if (sec) sec.classList.remove('section-hidden');
+    });
+  });
+
+  /* ── Edit / Save info ── */
+  var editBtn   = document.getElementById('editInfoBtn');
+  var saveBtn   = document.getElementById('saveInfoBtn');
+  var cancelBtn = document.getElementById('cancelInfoBtn');
+  var infoView  = document.getElementById('infoView');
+  var infoEdit  = document.getElementById('infoEdit');
+
+  function showEdit() { infoView.style.display='none'; infoEdit.style.display='block'; editBtn.style.display='none'; }
+  function hideEdit() { infoView.style.display='block'; infoEdit.style.display='none'; editBtn.style.display=''; }
+
+  editBtn.addEventListener('click', showEdit);
+  cancelBtn.addEventListener('click', hideEdit);
+
+  saveBtn.addEventListener('click', function(){
+    var fn     = document.getElementById('editFirstName').value.trim();
+    var ln     = document.getElementById('editLastName').value.trim();
+    var email  = document.getElementById('editEmail').value.trim();
+    var phone  = document.getElementById('editPhone').value.trim();
+    var dob    = document.getElementById('editDob').value;
+    var gender = document.getElementById('editGender').value;
+
+    if (!fn) { showToast('⚠️ First name is required', 'error'); return; }
+    if (!email) { showToast('⚠️ Email is required', 'error'); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showToast('⚠️ Enter a valid email', 'error'); return; }
+
+    saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving…';
+    saveBtn.disabled  = true;
+
+    setTimeout(function(){
+      /* 1. Persist to localStorage */
+      saveUserProfile({ firstName:fn, lastName:ln, email:email, phone:phone, dob:dob, gender:gender });
+
+      /* 2. Update sidebar instantly */
+      var fullName = (fn + (ln ? ' '+ln : '')).trim();
+      document.getElementById('sidebarName').textContent  = fullName;
+      document.getElementById('sidebarEmail').textContent = email;
+
+      /* 3. Update view rows */
+      document.getElementById('viewName').textContent   = fullName || '—';
+      document.getElementById('viewEmail').textContent  = email    || '—';
+      document.getElementById('viewPhone').textContent  = phone    || 'Not set';
+      document.getElementById('viewDob').textContent    = dob      || 'Not set';
+      document.getElementById('viewGender').textContent = gender   || 'Not set';
+
+      /* 4. Re-render navbar so name updates there too */
+      renderNavbar('profile');
+
+      saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+      saveBtn.disabled  = false;
+      hideEdit();
+      showToast('✅ Profile updated successfully!', 'success');
+    }, 700);
+  });
+
+  /* ── Sign Out from sidebar ── */
+  document.getElementById('sidebarSignOut').addEventListener('click', function(){
+    window.logoutUser();
+  });
+
+  /* ── Dark mode toggle ── */
+  var darkPref = document.getElementById('darkTogglePref');
+  if (darkPref) {
+    darkPref.checked = localStorage.getItem('vegully_theme') === 'dark';
+    darkPref.addEventListener('change', function(){ toggleTheme(); });
+  }
+
+  /* ── Mini orders ── */
+  var orders = getOrders();
+  var miniEl = document.getElementById('miniOrders');
+  if (miniEl) {
+    if (!orders.length) {
+      miniEl.innerHTML = '<p style="color:var(--text3);font-size:0.88rem;padding:12px 0;">No orders yet. <a href="shop.html" style="color:var(--accent);font-weight:600;">Start shopping!</a></p>';
+    } else {
+      miniEl.innerHTML = orders.slice(0,3).map(function(o){
+        var img = o.items && o.items[0] ? o.items[0].image : '';
+        return '<div style="display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);">'+
+          (img?'<img src="'+img+'" style="width:48px;height:48px;border-radius:var(--radius-sm);object-fit:cover;flex-shrink:0;" alt=""/>':'')+
+          '<div style="flex:1;min-width:0;">'+
+            '<div style="font-weight:600;font-size:0.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+o.id+'</div>'+
+            '<div style="font-size:0.78rem;color:var(--text3);">'+o.date+'</div>'+
+          '</div>'+
+          '<div style="font-family:var(--font-h);font-weight:800;color:var(--accent);white-space:nowrap;">₹'+o.total+'</div>'+
+        '</div>';
+      }).join('');
+    }
+  }
+
+})();
+</script>
+</body>
+</html>

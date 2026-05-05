@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Help Center — Vegully</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+<!-- ════════ NAVBAR ════════ -->
+<nav class="navbar" id="navbar"></nav>
+<script src="data.js"></script>
+<script>renderNavbar('help');</script>
+
+<div class="page-header">
+  <div class="container">
+    <h1>Help <span class="grad-text">Center</span></h1>
+    <p>Find answers, contact support, and resolve issues fast.</p>
+    <div style="max-width:520px;margin:20px auto 0;" class="search-bar">
+      <i class="fas fa-search"></i>
+      <input type="text" placeholder="Search help articles…" id="helpSearch" oninput="filterFaq(this.value)"/>
+    </div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+
+    <!-- QUICK HELP CARDS -->
+    <div class="section-header"><p class="section-tag">Quick Help</p><h2 class="section-title">How Can We Help?</h2></div>
+    <div class="help-grid">
+      <div class="help-card scroll-reveal" style="--delay:0ms" onclick="scrollToFaq()">
+        <span class="help-icon">📦</span>
+        <h3>Track My Order</h3>
+        <p>See real-time updates on where your order is and when it'll arrive.</p>
+      </div>
+      <div class="help-card scroll-reveal" style="--delay:80ms" onclick="scrollToFaq()">
+        <span class="help-icon">🔄</span>
+        <h3>Returns & Refunds</h3>
+        <p>We offer hassle-free returns on all fresh produce within 24 hours of delivery.</p>
+      </div>
+      <div class="help-card scroll-reveal" style="--delay:160ms" onclick="scrollToFaq()">
+        <span class="help-icon">💳</span>
+        <h3>Payment Issues</h3>
+        <p>Troubleshoot payment failures, refunds, and update your payment methods.</p>
+      </div>
+      <div class="help-card scroll-reveal" style="--delay:240ms" onclick="scrollToFaq()">
+        <span class="help-icon">🏠</span>
+        <h3>Manage Addresses</h3>
+        <p>Add, edit or remove saved delivery addresses from your profile.</p>
+      </div>
+      <div class="help-card scroll-reveal" style="--delay:320ms" onclick="scrollToFaq()">
+        <span class="help-icon">🎁</span>
+        <h3>Offers & Coupons</h3>
+        <p>Find active promo codes and learn how to apply them at checkout.</p>
+      </div>
+      <div class="help-card scroll-reveal" style="--delay:400ms" onclick="scrollToFaq()">
+        <span class="help-icon">🔐</span>
+        <h3>Account & Security</h3>
+        <p>Reset your password, enable 2FA, and manage privacy settings.</p>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div id="faqSection" style="max-width:760px;margin:0 auto;">
+      <div class="section-header"><p class="section-tag">FAQ</p><h2 class="section-title">Frequently Asked Questions</h2></div>
+      <div id="faqList"></div>
+    </div>
+
+    <!-- CONTACT -->
+    <div style="max-width:760px;margin:70px auto 0;">
+      <div class="section-header"><p class="section-tag">Still Need Help?</p><h2 class="section-title">Contact Us</h2></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:36px;">
+        <div class="why-card" style="cursor:pointer;" onclick="showToast('Opening live chat…','info')">
+          <span class="why-icon">💬</span><h3>Live Chat</h3>
+          <p>Chat with our support team — average response time is under 2 minutes.</p>
+          <div style="margin-top:14px;"><span style="font-size:0.8rem;background:rgba(var(--accent-rgb),0.12);color:var(--accent);padding:4px 12px;border-radius:99px;font-weight:700;">● Online Now</span></div>
+        </div>
+        <div class="why-card" onclick="showToast('Opening email client…','info')" style="cursor:pointer;">
+          <span class="why-icon">📧</span><h3>Email Support</h3>
+          <p>Send us an email and we'll get back to you within 4 hours on business days.</p>
+          <div style="margin-top:14px;font-size:0.85rem;color:var(--accent);font-weight:600;">support@vegully.com</div>
+        </div>
+        <div class="why-card" onclick="showToast('Calling support…','info')" style="cursor:pointer;">
+          <span class="why-icon">📞</span><h3>Phone Support</h3>
+          <p>Call us Mon–Sat, 9 AM – 9 PM for urgent queries and order issues.</p>
+          <div style="margin-top:14px;font-size:0.85rem;color:var(--accent);font-weight:600;">+91 1800-VEGULLY</div>
+        </div>
+        <div class="why-card" onclick="showToast('Opening WhatsApp…','info')" style="cursor:pointer;">
+          <span class="why-icon">💚</span><h3>WhatsApp</h3>
+          <p>Message us on WhatsApp for quick support — available 24×7.</p>
+          <div style="margin-top:14px;font-size:0.85rem;color:var(--accent);font-weight:600;">+91 98765 00000</div>
+        </div>
+      </div>
+
+      <div class="contact-form-wrap scroll-reveal">
+        <h3 style="font-family:var(--font-h);font-size:1.15rem;font-weight:800;margin-bottom:22px;padding-bottom:14px;border-bottom:1px solid var(--border);">Send Us a Message</h3>
+        <div class="form-grid">
+          <div class="form-group"><label>Your Name</label><input type="text" placeholder="Arjun Sharma"/></div>
+          <div class="form-group"><label>Email</label><input type="email" placeholder="arjun@email.com"/></div>
+          <div class="form-group full">
+            <label>Subject</label>
+            <select>
+              <option>Order Issue</option>
+              <option>Payment Problem</option>
+              <option>Return / Refund</option>
+              <option>Account Help</option>
+              <option>Vendor Query</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label>Message</label>
+            <textarea rows="4" placeholder="Describe your issue in detail…" style="width:100%;padding:13px 16px;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:var(--bg);color:var(--text);font-size:0.92rem;resize:vertical;transition:var(--t);"></textarea>
+          </div>
+        </div>
+        <button class="btn btn-primary" style="margin-top:20px;" onclick="submitContact()"><i class="fas fa-paper-plane"></i> Send Message</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand"><div class="logo"><span class="logo-icon">🥦</span>Vegully</div><p>Your premium grocery partner. Fresh produce, lightning-fast delivery, every day in 2026.</p><div class="socials"><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-twitter"></i></a><a href="#"><i class="fab fa-facebook"></i></a></div></div>
+      <div class="footer-links"><h4>Quick Links</h4><ul><li><a href="index.html">Home</a></li><li><a href="shop.html">Shop</a></li><li><a href="orders.html">My Orders</a></li><li><a href="profile.html">Profile</a></li></ul></div>
+      <div class="footer-links"><h4>Vendors</h4><ul><li><a href="vendors.html">Our Vendors</a></li><li><a href="vendor-signup.html">Become a Vendor</a></li></ul></div>
+      <div class="footer-links"><h4>Support</h4><ul><li><a href="help.html">Help Center</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li><li><a href="#">Contact Us</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 Vegully. All rights reserved. Made with ❤️ for fresh living.</p></div>
+  </div>
+</footer>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+var FAQS = [
+  {q:'How fast is Vegully delivery?', a:'We guarantee delivery within 10 minutes in our service areas. In some zones, delivery may take up to 20 minutes depending on demand and distance from our dark store.'},
+  {q:'What is your return policy?', a:'We offer a no-questions-asked return policy within 24 hours of delivery for all fresh produce. For packaged items, returns are accepted within 48 hours if the seal is intact. Simply raise a return request from your Orders page.'},
+  {q:'Can I change or cancel my order after placing it?', a:'You can cancel an order within 3 minutes of placing it. After that, orders enter our packing process and cannot be cancelled. Contact live chat for urgent cancellations.'},
+  {q:'Is there a minimum order value?', a:'There is no minimum order value on Vegully! However, orders below ₹499 attract a small delivery fee of ₹29.'},
+  {q:'What payment methods do you accept?', a:'We accept UPI (GPay, PhonePe, Paytm), credit/debit cards (Visa, Mastercard, RuPay), net banking, and Cash on Delivery (COD) up to ₹2,000.'},
+  {q:'How do I apply a coupon code?', a:'On the Cart page, enter your coupon code in the "Enter coupon code" field and click Apply. The discount will be reflected in your order total immediately. Try VEGULLY20 for 20% off your first order!'},
+  {q:'Are the products really organic?', a:'Products labelled "Organic" are sourced from USDA or India Organic certified vendors. Each product page shows the certification details and the farm it came from.'},
+  {q:'Can I schedule a delivery for later?', a:'Yes! At checkout, select "Schedule Delivery" to choose a preferred 1-hour delivery window up to 7 days in advance.'},
+  {q:'How do I track my order?', a:'Go to My Orders and click on any active order to see real-time tracking. You will also receive SMS and app notifications at every stage.'},
+  {q:'What if an item is out of stock?', a:'If an item goes out of stock after you order it, we will automatically refund the amount and notify you via SMS and email within 5 minutes.'},
+];
+
+function renderFaqs(list){
+  document.getElementById('faqList').innerHTML = list.map(function(f,i){
+    return '<div class="faq-item" id="faq'+i+'">'+
+      '<div class="faq-q" onclick="toggleFaq('+i+')"><span>'+f.q+'</span><i class="fas fa-plus"></i></div>'+
+      '<div class="faq-a">'+f.a+'</div>'+
+    '</div>';
+  }).join('');
+}
+window.toggleFaq = function(i){
+  var item = document.getElementById('faq'+i);
+  var open = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(function(el){el.classList.remove('open');});
+  if(!open) item.classList.add('open');
+};
+window.filterFaq = function(val){
+  val=val.toLowerCase().trim();
+  var filtered = val ? FAQS.filter(function(f){return f.q.toLowerCase().includes(val)||f.a.toLowerCase().includes(val);}) : FAQS;
+  renderFaqs(filtered);
+  if(val) document.getElementById('faqSection').scrollIntoView({behavior:'smooth'});
+};
+window.scrollToFaq = function(){ document.getElementById('faqSection').scrollIntoView({behavior:'smooth'}); };
+window.submitContact = function(){
+  showToast('✅ Message sent! We\'ll reply within 4 hours.','success');
+};
+renderFaqs(FAQS);
+initScrollAnimations();
+</script>
+</body>
+</html>

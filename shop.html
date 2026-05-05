@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shop — Vegully</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+<!-- ════════ NAVBAR ════════ -->
+<nav class="navbar" id="navbar"></nav>
+<script src="data.js"></script>
+<script>renderNavbar('shop');</script>
+
+
+<!-- ════════ PAGE HEADER ════════ -->
+<div class="page-header">
+  <div class="container">
+    <h1>Our <span class="grad-text">Store</span></h1>
+    <p>Fresh, premium groceries delivered to your door in minutes.</p>
+  </div>
+</div>
+
+<!-- ════════ SHOP LAYOUT ════════ -->
+<div class="container">
+  <div class="shop-layout">
+
+    <!-- SIDEBAR FILTERS -->
+    <aside class="filters-sidebar">
+      <h3 class="filter-title"><i class="fas fa-sliders-h" style="color:var(--accent);margin-right:8px"></i>Filters</h3>
+
+      <div class="filter-group">
+        <label>Category</label>
+        <div class="cat-filter-list" id="catFilterList">
+          <button class="cat-filter-btn active" data-cat="all"><i class="fas fa-th-large"></i> All Products</button>
+          <button class="cat-filter-btn" data-cat="fruits"><i class="fas fa-apple-alt"></i> Fruits</button>
+          <button class="cat-filter-btn" data-cat="vegetables"><i class="fas fa-leaf"></i> Vegetables</button>
+          <button class="cat-filter-btn" data-cat="dairy"><i class="fas fa-cheese"></i> Dairy</button>
+          <button class="cat-filter-btn" data-cat="bakery"><i class="fas fa-bread-slice"></i> Bakery</button>
+          <button class="cat-filter-btn" data-cat="beverages"><i class="fas fa-glass-water"></i> Beverages</button>
+          <button class="cat-filter-btn" data-cat="snacks"><i class="fas fa-cookie-bite"></i> Snacks</button>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label>Max Price: <strong id="priceLabel">₹250</strong></label>
+        <input type="range" id="priceRange" min="29" max="249" value="249" step="1"/>
+        <div class="price-labels"><span>₹29</span><span>₹249</span></div>
+      </div>
+
+      <div class="filter-group">
+        <label>Sort By</label>
+        <select class="sort-select" id="sortSelect">
+          <option value="default">Default</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="rating">Top Rated</option>
+          <option value="name">Name A–Z</option>
+        </select>
+      </div>
+
+      <button class="btn btn-outline btn-sm" id="clearFilters" style="width:100%;justify-content:center;margin-top:8px">
+        <i class="fas fa-redo"></i> Clear All Filters
+      </button>
+    </aside>
+
+    <!-- PRODUCT AREA -->
+    <div>
+      <div class="shop-top">
+        <div class="search-bar" style="flex:1;margin-bottom:0">
+          <i class="fas fa-search"></i>
+          <input type="text" id="searchInput" placeholder="Search fresh produce, dairy, bakery…"/>
+        </div>
+        <span class="results-count" id="resultsCount">Showing 38 products</span>
+      </div>
+
+      <div class="products-grid" id="shopGrid" style="margin-top:24px">
+        <!-- skeleton -->
+        <div class="skeleton-card"><div class="skeleton sk-img"></div><div class="sk-body"><div class="skeleton sk-line med"></div><div class="skeleton sk-line short"></div></div></div>
+        <div class="skeleton-card"><div class="skeleton sk-img"></div><div class="sk-body"><div class="skeleton sk-line med"></div><div class="skeleton sk-line short"></div></div></div>
+        <div class="skeleton-card"><div class="skeleton sk-img"></div><div class="sk-body"><div class="skeleton sk-line med"></div><div class="skeleton sk-line short"></div></div></div>
+        <div class="skeleton-card"><div class="skeleton sk-img"></div><div class="sk-body"><div class="skeleton sk-line med"></div><div class="skeleton sk-line short"></div></div></div>
+        <div class="skeleton-card"><div class="skeleton sk-img"></div><div class="sk-body"><div class="skeleton sk-line med"></div><div class="skeleton sk-line short"></div></div></div>
+        <div class="skeleton-card"><div class="skeleton sk-img"></div><div class="sk-body"><div class="skeleton sk-line med"></div><div class="skeleton sk-line short"></div></div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════ FOOTER ════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><span class="logo-icon">🥦</span>Vegully</div>
+        <p>Your premium grocery partner. Fresh produce, lightning-fast delivery, every day in 2026.</p>
+        <div class="socials">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <ul><li><a href="index.html">Home</a></li><li><a href="shop.html">Shop</a></li><li><a href="cart.html">Cart</a></li><li><a href="orders.html">My Orders</a></li></ul>
+      </div>
+      <div class="footer-links">
+        <h4>Categories</h4>
+        <ul><li><a href="shop.html?cat=fruits">Fruits</a></li><li><a href="shop.html?cat=vegetables">Vegetables</a></li><li><a href="shop.html?cat=dairy">Dairy</a></li><li><a href="shop.html?cat=bakery">Bakery</a></li></ul>
+      </div>
+      <div class="footer-links">
+        <h4>Support</h4>
+        <ul><li><a href="#">Help Center</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li><li><a href="#">Contact Us</a></li></ul>
+      </div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 Vegully. All rights reserved. Made with ❤️ for fresh living.</p></div>
+  </div>
+</footer>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+(function(){
+  var currentCat = 'all';
+  var currentMax = 249;
+  var currentSort = 'default';
+  var currentSearch = '';
+
+  // Read URL param for category
+  var params = new URLSearchParams(window.location.search);
+  if(params.get('cat')) currentCat = params.get('cat');
+
+  function applyFilters(){
+    var list = PRODUCTS.filter(function(p){
+      var catOk  = currentCat==='all' || p.category===currentCat;
+      var priceOk= p.price <= currentMax;
+      var searchOk = !currentSearch || p.name.toLowerCase().includes(currentSearch) || p.category.toLowerCase().includes(currentSearch);
+      return catOk && priceOk && searchOk;
+    });
+    if(currentSort==='price-asc')  list.sort(function(a,b){return a.price-b.price;});
+    if(currentSort==='price-desc') list.sort(function(a,b){return b.price-a.price;});
+    if(currentSort==='rating')     list.sort(function(a,b){return b.rating-a.rating;});
+    if(currentSort==='name')       list.sort(function(a,b){return a.name.localeCompare(b.name);});
+    renderGrid(list);
+  }
+
+  function renderGrid(list){
+    var grid = document.getElementById('shopGrid');
+    var countEl = document.getElementById('resultsCount');
+    countEl.textContent = 'Showing '+list.length+' product'+(list.length!==1?'s':'');
+    if(list.length===0){
+      grid.innerHTML='<div class="no-results" style="grid-column:1/-1"><i class="fas fa-search"></i><h3>No products found</h3><p>Try adjusting your filters or search term.</p></div>';
+      return;
+    }
+    grid.innerHTML = list.map(function(p,i){ return productCardHTML(p,i*50); }).join('');
+    initScrollAnimations();
+  }
+
+  // Category buttons
+  document.getElementById('catFilterList').querySelectorAll('.cat-filter-btn').forEach(function(btn){
+    if(btn.dataset.cat===currentCat) btn.classList.add('active');
+    else btn.classList.remove('active');
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('.cat-filter-btn').forEach(function(b){b.classList.remove('active');});
+      btn.classList.add('active');
+      currentCat = btn.dataset.cat;
+      applyFilters();
+    });
+  });
+
+  // Price range
+  var priceRange = document.getElementById('priceRange');
+  var priceLabel = document.getElementById('priceLabel');
+  priceRange.value = currentMax;
+  priceRange.addEventListener('input',function(){
+    currentMax = parseInt(priceRange.value);
+    priceLabel.textContent = '₹'+currentMax;
+    applyFilters();
+  });
+
+  // Sort
+  document.getElementById('sortSelect').addEventListener('change',function(){
+    currentSort = this.value; applyFilters();
+  });
+
+  // Search (debounced)
+  var searchTimer;
+  document.getElementById('searchInput').addEventListener('input',function(){
+    clearTimeout(searchTimer);
+    var val = this.value.trim().toLowerCase();
+    searchTimer = setTimeout(function(){ currentSearch=val; applyFilters(); },220);
+  });
+
+  // Clear filters
+  document.getElementById('clearFilters').addEventListener('click',function(){
+    currentCat='all'; currentMax=249; currentSort='default'; currentSearch='';
+    priceRange.value=249; priceLabel.textContent='₹249';
+    document.getElementById('sortSelect').value='default';
+    document.getElementById('searchInput').value='';
+    document.querySelectorAll('.cat-filter-btn').forEach(function(b){b.classList.remove('active');});
+    document.querySelector('[data-cat="all"]').classList.add('active');
+    applyFilters();
+  });
+
+  // Initial render
+  setTimeout(function(){ applyFilters(); },500);
+})();
+</script>
+</body>
+</html>

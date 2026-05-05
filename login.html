@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign In — Vegully</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+<!-- ════════ NAVBAR ════════ -->
+<nav class="navbar" id="navbar"></nav>
+<script src="data.js"></script>
+<script>renderNavbar('login');</script>
+
+<div class="auth-wrap">
+  <!-- LEFT PANEL -->
+  <div class="auth-left">
+    <div class="auth-illustration">🥦</div>
+    <h2>Fresh Groceries,<br/>Delivered Fast</h2>
+    <p>Join 50,000+ happy customers getting farm-fresh produce at their doorstep in 10 minutes.</p>
+    <div class="auth-perks">
+      <div class="auth-perk"><i class="fas fa-bolt"></i><span>10-minute delivery guarantee</span></div>
+      <div class="auth-perk"><i class="fas fa-leaf"></i><span>Certified fresh & organic options</span></div>
+      <div class="auth-perk"><i class="fas fa-tag"></i><span>Exclusive member-only deals</span></div>
+      <div class="auth-perk"><i class="fas fa-redo"></i><span>Easy reorders & smart cart</span></div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="auth-right">
+    <div class="auth-form-box">
+      <div class="auth-logo"><span>🥦</span> Vegully</div>
+
+      <!-- TAB SWITCHER -->
+      <div style="display:flex;background:var(--bg2);border-radius:99px;padding:4px;margin-bottom:28px;border:1px solid var(--border);">
+        <button id="loginTab" onclick="switchTab('login')" style="flex:1;padding:10px;border-radius:99px;font-weight:700;font-size:0.9rem;cursor:pointer;border:none;background:var(--grad);color:#fff;transition:all 0.3s;">Sign In</button>
+        <button id="signupTab" onclick="switchTab('signup')" style="flex:1;padding:10px;border-radius:99px;font-weight:700;font-size:0.9rem;cursor:pointer;border:none;background:none;color:var(--text2);transition:all 0.3s;">Create Account</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <div id="loginForm">
+        <div class="auth-title">Welcome back!</div>
+        <div class="auth-sub">Sign in to continue to your Vegully account.</div>
+        <div class="form-group" style="margin-bottom:16px;">
+          <label>Email Address</label>
+          <input type="email" id="loginEmail" placeholder="arjun@email.com"/>
+        </div>
+        <div class="form-group password-field" style="margin-bottom:8px;">
+          <label>Password</label>
+          <input type="password" id="loginPw" placeholder="••••••••"/>
+          <button class="pw-toggle" onclick="togglePw('loginPw',this)"><i class="far fa-eye"></i></button>
+        </div>
+        <div style="text-align:right;margin-bottom:20px;"><a href="#" style="font-size:0.82rem;color:var(--accent);font-weight:600;">Forgot password?</a></div>
+        <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="handleLogin()"><i class="fas fa-sign-in-alt"></i> Sign In</button>
+        <div class="auth-divider"><span>or continue with</span></div>
+        <div class="social-auth-btns">
+          <button class="social-btn" onclick="socialLogin('Google')"><i class="fab fa-google" style="color:#ea4335;"></i> Google</button>
+          <button class="social-btn" onclick="socialLogin('Facebook')"><i class="fab fa-facebook" style="color:#1877f2;"></i> Facebook</button>
+        </div>
+      </div>
+
+      <!-- SIGNUP FORM -->
+      <div id="signupForm" style="display:none;">
+        <div class="auth-title">Create your account</div>
+        <div class="auth-sub">Start ordering fresh groceries in minutes.</div>
+        <div class="form-grid" style="margin-bottom:16px;">
+          <div class="form-group"><label>First Name</label><input type="text" placeholder="Arjun"/></div>
+          <div class="form-group"><label>Last Name</label><input type="text" placeholder="Sharma"/></div>
+        </div>
+        <div class="form-group" style="margin-bottom:16px;"><label>Email Address</label><input type="email" placeholder="arjun@email.com"/></div>
+        <div class="form-group" style="margin-bottom:16px;"><label>Phone Number</label><input type="tel" placeholder="+91 98765 43210"/></div>
+        <div class="form-group password-field" style="margin-bottom:16px;">
+          <label>Password</label>
+          <input type="password" id="signupPw" placeholder="Min. 8 characters"/>
+          <button class="pw-toggle" onclick="togglePw('signupPw',this)"><i class="far fa-eye"></i></button>
+        </div>
+        <div class="form-group" style="margin-bottom:20px;">
+          <label>Confirm Password</label>
+          <input type="password" placeholder="Re-enter password"/>
+        </div>
+        <label style="display:flex;align-items:flex-start;gap:8px;margin-bottom:20px;cursor:pointer;">
+          <input type="checkbox" style="margin-top:3px;accent-color:var(--accent);"/>
+          <span style="font-size:0.82rem;color:var(--text2);">I agree to Vegully's <a href="#" style="color:var(--accent);">Terms of Service</a> and <a href="#" style="color:var(--accent);">Privacy Policy</a></span>
+        </label>
+        <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="handleSignup()"><i class="fas fa-user-plus"></i> Create Account</button>
+        <div class="auth-divider"><span>or sign up with</span></div>
+        <div class="social-auth-btns">
+          <button class="social-btn" onclick="socialLogin('Google')"><i class="fab fa-google" style="color:#ea4335;"></i> Google</button>
+          <button class="social-btn" onclick="socialLogin('Facebook')"><i class="fab fa-facebook" style="color:#1877f2;"></i> Facebook</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+function switchTab(tab){
+  var isLogin = tab==='login';
+  document.getElementById('loginForm').style.display  = isLogin?'block':'none';
+  document.getElementById('signupForm').style.display = isLogin?'none':'block';
+  var lt=document.getElementById('loginTab'), st=document.getElementById('signupTab');
+  lt.style.background = isLogin?'var(--grad)':'none';
+  lt.style.color      = isLogin?'#fff':'var(--text2)';
+  st.style.background = isLogin?'none':'var(--grad)';
+  st.style.color      = isLogin?'var(--text2)':'#fff';
+}
+
+function togglePw(id, btn){
+  var inp=document.getElementById(id); if(!inp) return;
+  var shown=inp.type==='text';
+  inp.type=shown?'password':'text';
+  btn.querySelector('i').className=shown?'far fa-eye':'far fa-eye-slash';
+}
+
+function handleLogin(){
+  var email=document.getElementById('loginEmail').value.trim();
+  var pw=document.getElementById('loginPw').value;
+  if(!email||!pw){ showToast('⚠️ Please fill in all fields','error'); return; }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ showToast('⚠️ Enter a valid email','error'); return; }
+  var btn=document.querySelector('#loginForm .btn-primary');
+  btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Signing in…'; btn.disabled=true;
+  setTimeout(function(){
+    loginUser('Arjun','Sharma',email,'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&auto=format&fit=crop&q=80');
+    showToast('✅ Welcome back, Arjun!','success');
+    setTimeout(function(){ window.location.href='index.html'; },900);
+  },1400);
+}
+
+function handleSignup(){
+  var fnEl=document.querySelector('#signupForm input[placeholder="Arjun"]');
+  var lnEl=document.querySelector('#signupForm input[placeholder="Sharma"]');
+  var emEl=document.querySelector('#signupForm input[type="email"]');
+  var fn=fnEl?fnEl.value.trim():'';
+  var ln=lnEl?lnEl.value.trim():'';
+  var em=emEl?emEl.value.trim():'';
+  if(!fn||!em){ showToast('⚠️ Please fill all required fields','error'); return; }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){ showToast('⚠️ Enter a valid email','error'); return; }
+  var btn=document.querySelector('#signupForm .btn-primary');
+  btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Creating account…'; btn.disabled=true;
+  setTimeout(function(){
+    loginUser(fn,ln,em,'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&auto=format&fit=crop&q=80');
+    showToast('🎉 Welcome to Vegully, '+fn+'!','success');
+    setTimeout(function(){ window.location.href='index.html'; },900);
+  },1600);
+}
+
+function socialLogin(provider){
+  showToast('Connecting with '+provider+'…','info');
+  setTimeout(function(){
+    loginUser('Arjun','Sharma','arjun@'+provider.toLowerCase()+'.com','https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&auto=format&fit=crop&q=80');
+    showToast('✅ Signed in with '+provider+'!','success');
+    setTimeout(function(){ window.location.href='index.html'; },900);
+  },1400);
+}
+
+/* Redirect if already logged in */
+if(isLoggedIn()){ window.location.href='index.html'; }
+</script>
+</body>
+</html>

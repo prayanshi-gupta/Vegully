@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Become a Vendor — Vegully</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    .vs-layout{display:grid;grid-template-columns:1fr 420px;gap:48px;padding:60px 0 90px;align-items:start;}
+    .vs-form-wrap{background:var(--surface);border-radius:var(--radius-xl);border:1px solid var(--border);padding:40px;box-shadow:var(--shadow);}
+    .vs-sidebar{position:sticky;top:88px;}
+    .vs-hero-card{background:var(--grad);border-radius:var(--radius-xl);padding:40px 36px;color:#fff;margin-bottom:24px;box-shadow:var(--shadow-acc);}
+    .vs-hero-card h2{font-family:var(--font-h);font-size:1.6rem;font-weight:800;margin-bottom:10px;}
+    .vs-hero-card p{opacity:0.85;font-size:0.92rem;line-height:1.7;}
+    .perks-list{margin-top:20px;display:flex;flex-direction:column;gap:10px;}
+    .perk{display:flex;align-items:center;gap:10px;font-size:0.88rem;}
+    .perk-icon{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .vs-testimonial{background:var(--surface);border-radius:var(--radius-lg);border:1px solid var(--border);padding:24px;box-shadow:var(--shadow-sm);}
+    .vs-testimonial img{width:48px;height:48px;border-radius:50%;object-fit:cover;margin-bottom:14px;}
+    .vs-testimonial blockquote{font-size:0.88rem;color:var(--text2);line-height:1.7;font-style:italic;margin-bottom:12px;}
+    .vs-testimonial cite{font-size:0.8rem;font-weight:700;color:var(--accent);}
+    .form-step{display:none;}
+    .form-step.active{display:block;}
+    .step-indicator{display:flex;gap:8px;margin-bottom:32px;}
+    .si-dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:var(--t);}
+    .si-dot.active{background:var(--accent);width:24px;border-radius:4px;}
+    .si-dot.done{background:var(--accent);}
+    .form-step-title{font-family:var(--font-h);font-size:1.25rem;font-weight:800;margin-bottom:6px;}
+    .form-step-sub{font-size:0.88rem;color:var(--text2);margin-bottom:24px;}
+    .step-nav{display:flex;gap:12px;margin-top:28px;}
+    .file-upload{border:2px dashed var(--border);border-radius:var(--radius);padding:32px;text-align:center;cursor:pointer;transition:var(--t);background:var(--bg);}
+    .file-upload:hover{border-color:var(--accent);background:rgba(var(--accent-rgb),0.05);}
+    .file-upload i{font-size:2rem;color:var(--accent);display:block;margin-bottom:10px;}
+    .file-upload p{font-size:0.85rem;color:var(--text2);}
+    .file-upload input{display:none;}
+    .category-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
+    .cat-chip{padding:8px 16px;border-radius:99px;border:1.5px solid var(--border);background:var(--surface);font-size:0.82rem;font-weight:600;cursor:pointer;transition:var(--t);color:var(--text2);}
+    .cat-chip.selected{background:rgba(var(--accent-rgb),0.12);border-color:var(--accent);color:var(--accent);}
+    .success-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.65);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;z-index:9999;opacity:0;visibility:hidden;transition:var(--t);}
+    .success-overlay.show{opacity:1;visibility:visible;}
+    .success-box{background:var(--surface);border-radius:var(--radius-xl);padding:52px 44px;text-align:center;max-width:460px;animation:popIn 0.5s var(--ease) both;border:1px solid var(--border);}
+    .success-icon{width:80px;height:80px;border-radius:50%;background:var(--grad);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;font-size:2rem;color:#fff;box-shadow:var(--shadow-acc);}
+    @media(max-width:960px){.vs-layout{grid-template-columns:1fr;}.vs-sidebar{position:static;}}
+  </style>
+</head>
+<body>
+
+<!-- ════════ NAVBAR ════════ -->
+<nav class="navbar" id="navbar"></nav>
+<script src="data.js"></script>
+<script>renderNavbar('vendor-signup');</script>
+
+<div class="page-header">
+  <div class="container">
+    <h1>Become a <span class="grad-text">Vendor</span></h1>
+    <p>Join 120+ vendors across India and grow your business with Vegully.</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="vs-layout">
+
+    <!-- ── FORM ── -->
+    <div class="vs-form-wrap">
+      <div class="step-indicator">
+        <div class="si-dot active" id="dot0"></div>
+        <div class="si-dot" id="dot1"></div>
+        <div class="si-dot" id="dot2"></div>
+        <div class="si-dot" id="dot3"></div>
+      </div>
+
+      <!-- Step 1: Business Info -->
+      <div class="form-step active" id="step0">
+        <div class="form-step-title">Business Information</div>
+        <div class="form-step-sub">Tell us about your business so we can get you set up.</div>
+        <div class="form-grid">
+          <div class="form-group"><label>Business Name *</label><input type="text" id="bizName" placeholder="e.g. Green Valley Farms"/></div>
+          <div class="form-group"><label>Owner / Contact Name *</label><input type="text" id="ownerName" placeholder="Your full name"/></div>
+          <div class="form-group"><label>Business Email *</label><input type="email" id="bizEmail" placeholder="hello@yourbusiness.com"/></div>
+          <div class="form-group"><label>Phone Number *</label><input type="tel" id="bizPhone" placeholder="+91 98765 43210"/></div>
+          <div class="form-group full"><label>Business Address *</label><input type="text" id="bizAddr" placeholder="Full registered address"/></div>
+          <div class="form-group"><label>City *</label><input type="text" id="bizCity" placeholder="Bangalore"/></div>
+          <div class="form-group"><label>GST Number</label><input type="text" id="gstNum" placeholder="22AAAAA0000A1Z5"/></div>
+        </div>
+        <div class="step-nav">
+          <button class="btn btn-primary" onclick="nextStep(0)">Next: Product Info <i class="fas fa-arrow-right"></i></button>
+        </div>
+      </div>
+
+      <!-- Step 2: Product Info -->
+      <div class="form-step" id="step1">
+        <div class="form-step-title">Products & Categories</div>
+        <div class="form-step-sub">What will you be selling on Vegully?</div>
+        <div class="form-group" style="margin-bottom:20px;">
+          <label>Select Your Category (choose all that apply) *</label>
+          <div class="category-chips">
+            <div class="cat-chip" onclick="toggleChip(this)">🍎 Fruits</div>
+            <div class="cat-chip" onclick="toggleChip(this)">🥦 Vegetables</div>
+            <div class="cat-chip" onclick="toggleChip(this)">🥛 Dairy</div>
+            <div class="cat-chip" onclick="toggleChip(this)">🥐 Bakery</div>
+            <div class="cat-chip" onclick="toggleChip(this)">☕ Beverages</div>
+            <div class="cat-chip" onclick="toggleChip(this)">🍫 Snacks</div>
+            <div class="cat-chip" onclick="toggleChip(this)">🌿 Organic</div>
+            <div class="cat-chip" onclick="toggleChip(this)">🫙 Packaged Foods</div>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:16px;"><label>Estimated Number of Products</label><select><option>1–20</option><option>21–50</option><option>51–100</option><option>100+</option></select></div>
+        <div class="form-group" style="margin-bottom:16px;"><label>Monthly Supply Capacity (kg / units)</label><input type="text" placeholder="e.g. 500 kg/month"/></div>
+        <div class="form-group" style="margin-bottom:16px;"><label>Brief Description of Your Business *</label><textarea rows="3" placeholder="Tell customers what makes your products special…" style="width:100%;padding:13px 16px;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:var(--bg);color:var(--text);font-size:0.92rem;resize:vertical;transition:var(--t);"></textarea></div>
+        <div class="step-nav">
+          <button class="btn btn-ghost" onclick="prevStep(1)"><i class="fas fa-arrow-left"></i> Back</button>
+          <button class="btn btn-primary" onclick="nextStep(1)">Next: Documents <i class="fas fa-arrow-right"></i></button>
+        </div>
+      </div>
+
+      <!-- Step 3: Documents -->
+      <div class="form-step" id="step2">
+        <div class="form-step-title">Upload Documents</div>
+        <div class="form-step-sub">We need a few documents to verify your business. All files are securely encrypted.</div>
+        <div class="form-group" style="margin-bottom:20px;">
+          <label>Business Registration Certificate</label>
+          <div class="file-upload" onclick="this.querySelector('input').click()">
+            <i class="fas fa-file-upload"></i>
+            <p>Click to upload or drag & drop<br/><span style="font-size:0.75rem;color:var(--text3);">PDF, JPG or PNG · Max 5MB</span></p>
+            <input type="file" accept=".pdf,.jpg,.png"/>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:20px;">
+          <label>GST Certificate (if applicable)</label>
+          <div class="file-upload" onclick="this.querySelector('input').click()">
+            <i class="fas fa-file-certificate"></i>
+            <p>Click to upload or drag & drop<br/><span style="font-size:0.75rem;color:var(--text3);">PDF, JPG or PNG · Max 5MB</span></p>
+            <input type="file" accept=".pdf,.jpg,.png"/>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:20px;">
+          <label>FSSAI License (for food businesses)</label>
+          <div class="file-upload" onclick="this.querySelector('input').click()">
+            <i class="fas fa-shield-alt"></i>
+            <p>Click to upload or drag & drop<br/><span style="font-size:0.75rem;color:var(--text3);">PDF, JPG or PNG · Max 5MB</span></p>
+            <input type="file" accept=".pdf,.jpg,.png"/>
+          </div>
+        </div>
+        <div class="step-nav">
+          <button class="btn btn-ghost" onclick="prevStep(2)"><i class="fas fa-arrow-left"></i> Back</button>
+          <button class="btn btn-primary" onclick="nextStep(2)">Next: Bank Details <i class="fas fa-arrow-right"></i></button>
+        </div>
+      </div>
+
+      <!-- Step 4: Bank Details -->
+      <div class="form-step" id="step3">
+        <div class="form-step-title">Bank Account Details</div>
+        <div class="form-step-sub">We pay directly to your account every week. Your details are 256-bit encrypted.</div>
+        <div class="form-grid">
+          <div class="form-group"><label>Account Holder Name *</label><input type="text" placeholder="As per bank records"/></div>
+          <div class="form-group"><label>Bank Name *</label><input type="text" placeholder="e.g. HDFC Bank"/></div>
+          <div class="form-group"><label>Account Number *</label><input type="text" placeholder="Your account number"/></div>
+          <div class="form-group"><label>Confirm Account Number *</label><input type="text" placeholder="Re-enter account number"/></div>
+          <div class="form-group full"><label>IFSC Code *</label><input type="text" placeholder="e.g. HDFC0001234"/></div>
+        </div>
+        <div style="margin-top:16px;padding:14px 18px;background:rgba(var(--accent-rgb),0.07);border-radius:var(--radius-sm);border:1px solid rgba(var(--accent-rgb),0.2);font-size:0.82rem;color:var(--text2);">
+          <i class="fas fa-lock" style="color:var(--accent);margin-right:6px;"></i> Your bank information is encrypted and never shared with third parties.
+        </div>
+        <div style="margin-top:20px;">
+          <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;">
+            <input type="checkbox" id="agreeTerms" style="margin-top:3px;accent-color:var(--accent);"/>
+            <span style="font-size:0.85rem;color:var(--text2);">I agree to Vegully's <a href="#" style="color:var(--accent);">Vendor Terms of Service</a>, <a href="#" style="color:var(--accent);">Commission Policy</a>, and confirm all uploaded documents are genuine.</span>
+          </label>
+        </div>
+        <div class="step-nav">
+          <button class="btn btn-ghost" onclick="prevStep(3)"><i class="fas fa-arrow-left"></i> Back</button>
+          <button class="btn btn-primary" id="submitVendorBtn" onclick="submitVendor()"><i class="fas fa-paper-plane"></i> Submit Application</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SIDEBAR ── -->
+    <div class="vs-sidebar">
+      <div class="vs-hero-card">
+        <h2>Why Sell on Vegully?</h2>
+        <p>Join India's fastest-growing premium grocery platform and reach thousands of verified buyers every day.</p>
+        <div class="perks-list">
+          <div class="perk"><div class="perk-icon"><i class="fas fa-rupee-sign"></i></div><span>Zero listing fees. Keep 92% of every sale.</span></div>
+          <div class="perk"><div class="perk-icon"><i class="fas fa-bolt"></i></div><span>Weekly bank payouts — always on time.</span></div>
+          <div class="perk"><div class="perk-icon"><i class="fas fa-chart-line"></i></div><span>Full analytics dashboard to track your sales.</span></div>
+          <div class="perk"><div class="perk-icon"><i class="fas fa-truck"></i></div><span>Vegully handles all delivery logistics for you.</span></div>
+          <div class="perk"><div class="perk-icon"><i class="fas fa-headset"></i></div><span>Dedicated vendor support 7 days a week.</span></div>
+          <div class="perk"><div class="perk-icon"><i class="fas fa-users"></i></div><span>Access to 50,000+ verified customers.</span></div>
+        </div>
+      </div>
+      <div class="vs-testimonial">
+        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100&auto=format&fit=crop&q=80" alt="Vendor testimonial"/>
+        <blockquote>"Joining Vegully was the best decision for our farm. We went from 200 to 2,000 orders a month in just 6 months. The platform is seamless and the team is incredible."</blockquote>
+        <cite>— Rajesh Patel, Green Valley Farms · Nashik</cite>
+        <div style="display:flex;margin-top:8px;color:#f59e0b;font-size:0.85rem;">★★★★★</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- SUCCESS OVERLAY -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-box">
+    <div class="success-icon"><i class="fas fa-check"></i></div>
+    <h2>Application Submitted! 🎉</h2>
+    <p style="color:var(--text2);margin:12px 0;">Thank you for applying to be a Vegully vendor. Our team will review your application and get back to you within <strong>24–48 hours</strong>.</p>
+    <p style="font-size:0.82rem;color:var(--text3);">A confirmation email has been sent to your registered email address.</p>
+    <div style="display:flex;gap:12px;justify-content:center;margin-top:28px;flex-wrap:wrap;">
+      <a href="vendors.html" class="btn btn-primary"><i class="fas fa-store"></i> View Vendors</a>
+      <a href="index.html" class="btn btn-ghost"><i class="fas fa-home"></i> Go Home</a>
+    </div>
+  </div>
+</div>
+
+<footer class="footer" style="margin-top:60px">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand"><div class="logo"><span class="logo-icon">🥦</span>Vegully</div><p>Your premium grocery partner. Fresh produce, lightning-fast delivery, every day in 2026.</p><div class="socials"><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-twitter"></i></a><a href="#"><i class="fab fa-facebook"></i></a></div></div>
+      <div class="footer-links"><h4>Quick Links</h4><ul><li><a href="index.html">Home</a></li><li><a href="shop.html">Shop</a></li><li><a href="vendors.html">Vendors</a></li><li><a href="profile.html">Profile</a></li></ul></div>
+      <div class="footer-links"><h4>Vendors</h4><ul><li><a href="vendors.html">Our Vendors</a></li><li><a href="vendor-signup.html">Become a Vendor</a></li><li><a href="#">Vendor Dashboard</a></li><li><a href="#">Commission Policy</a></li></ul></div>
+      <div class="footer-links"><h4>Support</h4><ul><li><a href="#">Help Center</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li><li><a href="#">Contact Us</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 Vegully. All rights reserved. Made with ❤️ for fresh living.</p></div>
+  </div>
+</footer>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+var currentStep = 0;
+var totalSteps  = 4;
+
+function updateDots(){
+  for(var i=0;i<totalSteps;i++){
+    var dot = document.getElementById('dot'+i);
+    if(!dot) continue;
+    dot.classList.remove('active','done');
+    if(i===currentStep) dot.classList.add('active');
+    else if(i<currentStep) dot.classList.add('done');
+  }
+}
+
+function nextStep(from){
+  // Simple validation on first step
+  if(from===0){
+    var req=['bizName','ownerName','bizEmail','bizPhone','bizAddr','bizCity'];
+    for(var i=0;i<req.length;i++){
+      var el=document.getElementById(req[i]);
+      if(el&&!el.value.trim()){
+        el.focus(); showToast('⚠️ Please fill all required fields','error'); return;
+      }
+    }
+  }
+  document.getElementById('step'+from).classList.remove('active');
+  currentStep = from+1;
+  document.getElementById('step'+currentStep).classList.add('active');
+  updateDots();
+  window.scrollTo({top:document.querySelector('.vs-form-wrap').offsetTop-100,behavior:'smooth'});
+}
+
+function prevStep(from){
+  document.getElementById('step'+from).classList.remove('active');
+  currentStep = from-1;
+  document.getElementById('step'+currentStep).classList.add('active');
+  updateDots();
+}
+
+function toggleChip(el){ el.classList.toggle('selected'); }
+
+function submitVendor(){
+  if(!document.getElementById('agreeTerms').checked){
+    showToast('⚠️ Please agree to the terms to continue','error'); return;
+  }
+  var btn = document.getElementById('submitVendorBtn');
+  btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Submitting…';
+  btn.disabled=true;
+  setTimeout(function(){
+    document.getElementById('successOverlay').classList.add('show');
+    btn.innerHTML='<i class="fas fa-paper-plane"></i> Submit Application';
+    btn.disabled=false;
+  },2200);
+}
+
+// File upload visual feedback
+document.querySelectorAll('.file-upload input').forEach(function(inp){
+  inp.addEventListener('change',function(){
+    if(this.files[0]){
+      var p = this.closest('.file-upload').querySelector('p');
+      p.innerHTML='<strong style="color:var(--accent)">✓ '+this.files[0].name+'</strong>';
+    }
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Orders — Vegully</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    .orders-tabs{display:flex;gap:8px;margin-bottom:32px;flex-wrap:wrap;}
+    .otab{padding:10px 22px;border-radius:99px;font-size:0.88rem;font-weight:600;border:1.5px solid var(--border);background:var(--surface);color:var(--text2);cursor:pointer;transition:var(--t);}
+    .otab.active,.otab:hover{background:var(--grad);color:#fff;border-color:var(--accent);box-shadow:var(--shadow-acc);}
+    .order-card{background:var(--surface);border-radius:var(--radius-lg);border:1px solid var(--border);padding:24px 28px;margin-bottom:20px;box-shadow:var(--shadow-sm);transition:var(--t);animation:fadeSlideUp 0.5s var(--ease) both;}
+    .order-card:hover{box-shadow:var(--shadow);border-color:rgba(var(--accent-rgb),0.25);}
+    .order-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px;}
+    .order-id{font-family:var(--font-h);font-size:1rem;font-weight:700;}
+    .order-date{font-size:0.82rem;color:var(--text3);}
+    .order-status{padding:5px 14px;border-radius:99px;font-size:0.78rem;font-weight:700;letter-spacing:0.3px;}
+    .status-delivered{background:#d1fae5;color:#065f46;}
+    .status-processing{background:#fef3c7;color:#92400e;}
+    .status-cancelled{background:#fee2e2;color:#991b1b;}
+    .status-shipped{background:#dbeafe;color:#1e40af;}
+    .order-items-preview{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px;}
+    .oi-chip{display:flex;align-items:center;gap:8px;background:var(--bg2);border-radius:var(--radius-sm);padding:7px 12px;font-size:0.82rem;border:1px solid var(--border);}
+    .oi-chip img{width:30px;height:30px;object-fit:cover;border-radius:6px;}
+    .order-card-footer{display:flex;align-items:center;justify-content:space-between;padding-top:18px;border-top:1px solid var(--border);flex-wrap:wrap;gap:12px;}
+    .order-total{font-family:var(--font-h);font-weight:800;font-size:1.05rem;color:var(--accent);}
+    .order-actions{display:flex;gap:10px;flex-wrap:wrap;}
+    .track-bar{margin:16px 0;display:flex;align-items:center;gap:0;}
+    .track-step{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;}
+    .track-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;border:2px solid var(--border);background:var(--surface);color:var(--text3);z-index:1;}
+    .track-step.done .track-dot{background:var(--grad);color:#fff;border-color:var(--accent);}
+    .track-label{font-size:0.68rem;color:var(--text3);text-align:center;font-weight:500;}
+    .track-step.done .track-label{color:var(--accent);}
+    .track-line{flex:1;height:2px;background:var(--border);margin-bottom:18px;}
+    .track-line.done{background:var(--accent);}
+    .empty-orders{text-align:center;padding:100px 20px;}
+    .empty-orders i{font-size:4rem;color:var(--text3);display:block;margin-bottom:20px;}
+    .empty-orders h2{font-family:var(--font-h);margin-bottom:12px;}
+    .empty-orders p{color:var(--text2);margin-bottom:28px;}
+    .reorder-toast{background:var(--grad);color:#fff;}
+  </style>
+</head>
+<body>
+
+<!-- ════════ NAVBAR ════════ -->
+<nav class="navbar" id="navbar"></nav>
+<script src="data.js"></script>
+<script>renderNavbar('orders');</script>
+
+<div class="page-header">
+  <div class="container">
+    <h1>My <span class="grad-text">Orders</span></h1>
+    <p>Track, reorder, and manage all your Vegully purchases.</p>
+  </div>
+</div>
+
+<div class="container" style="padding-top:40px;padding-bottom:80px;">
+  <div class="orders-tabs">
+    <button class="otab active" data-filter="all">All Orders</button>
+    <button class="otab" data-filter="Processing">Processing</button>
+    <button class="otab" data-filter="shipped">Shipped</button>
+    <button class="otab" data-filter="delivered">Delivered</button>
+    <button class="otab" data-filter="cancelled">Cancelled</button>
+  </div>
+  <div id="ordersContainer"></div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><span class="logo-icon">🥦</span>Vegully</div>
+        <p>Your premium grocery partner. Fresh produce, lightning-fast delivery, every day in 2026.</p>
+        <div class="socials">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+      <div class="footer-links"><h4>Quick Links</h4><ul><li><a href="index.html">Home</a></li><li><a href="shop.html">Shop</a></li><li><a href="cart.html">Cart</a></li><li><a href="orders.html">My Orders</a></li></ul></div>
+      <div class="footer-links"><h4>Categories</h4><ul><li><a href="shop.html?cat=fruits">Fruits</a></li><li><a href="shop.html?cat=vegetables">Vegetables</a></li><li><a href="shop.html?cat=dairy">Dairy</a></li><li><a href="shop.html?cat=bakery">Bakery</a></li></ul></div>
+      <div class="footer-links"><h4>Support</h4><ul><li><a href="#">Help Center</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li><li><a href="#">Contact Us</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 Vegully. All rights reserved. Made with ❤️ for fresh living.</p></div>
+  </div>
+</footer>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+(function(){
+  // Seed demo orders if none exist
+  function seedOrders(){
+    if(getOrders().length > 0) return;
+    var demo = [
+      {
+        id:'VG-482910',date:'28 Apr 2026',
+        items:[
+          {id:1,name:'Alphonso Mangoes',price:249,qty:2,unit:'1 kg',image:'https://images.unsplash.com/photo-1553279768-865429fa0078?w=200&auto=format&fit=crop&q=80'},
+          {id:11,name:'Baby Spinach',price:59,qty:1,unit:'200 g',image:'https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=200&auto=format&fit=crop&q=80'},
+          {id:21,name:'Organic Full Cream Milk',price:75,qty:2,unit:'1 L',image:'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=200&auto=format&fit=crop&q=80'}
+        ],
+        total:741,status:'delivered',address:'Flat 4B, Indiranagar, Bangalore'
+      },
+      {
+        id:'VG-371822',date:'22 Apr 2026',
+        items:[
+          {id:27,name:'Sourdough Bread',price:149,qty:1,unit:'400 g',image:'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=200&auto=format&fit=crop&q=80'},
+          {id:31,name:'Cold Brew Coffee',price:149,qty:2,unit:'300 ml',image:'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=200&auto=format&fit=crop&q=80'}
+        ],
+        total:476,status:'delivered',address:'12 MG Road, Bangalore'
+      },
+      {
+        id:'VG-290045',date:'30 Apr 2026',
+        items:[
+          {id:4,name:'Blueberries',price:199,qty:1,unit:'200 g',image:'https://images.unsplash.com/photo-1457296898342-cdd24585d095?w=200&auto=format&fit=crop&q=80'},
+          {id:22,name:'Greek Yogurt',price:99,qty:2,unit:'400 g',image:'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=200&auto=format&fit=crop&q=80'}
+        ],
+        total:426,status:'Processing',address:'Koramangala, Bangalore'
+      }
+    ];
+    localStorage.setItem('vegully_orders', JSON.stringify(demo));
+  }
+
+  seedOrders();
+
+  var currentFilter = 'all';
+
+  function statusClass(s){
+    if(s==='delivered') return 'status-delivered';
+    if(s==='Processing') return 'status-processing';
+    if(s==='cancelled') return 'status-cancelled';
+    if(s==='shipped') return 'status-shipped';
+    return 'status-processing';
+  }
+  function statusLabel(s){
+    var map={delivered:'✓ Delivered',Processing:'⏳ Processing',cancelled:'✕ Cancelled',shipped:'🚚 Shipped'};
+    return map[s]||s;
+  }
+
+  function trackHTML(status){
+    var steps=[
+      {label:'Ordered',done:true},
+      {label:'Packed', done:status!=='Processing'},
+      {label:'Shipped',done:status==='shipped'||status==='delivered'},
+      {label:'Delivered',done:status==='delivered'}
+    ];
+    var html='<div class="track-bar">';
+    steps.forEach(function(st,i){
+      html+='<div class="track-step'+(st.done?' done':'')+'"><div class="track-dot">'+(st.done?'<i class="fas fa-check"></i>':(i+1))+'</div><div class="track-label">'+st.label+'</div></div>';
+      if(i<steps.length-1) html+='<div class="track-line'+(steps[i+1].done?' done':'')+'"></div>';
+    });
+    html+='</div>';
+    return html;
+  }
+
+  function renderOrders(){
+    var orders = getOrders();
+    var filtered = currentFilter==='all'? orders : orders.filter(function(o){ return o.status===currentFilter; });
+    var container = document.getElementById('ordersContainer');
+
+    if(filtered.length===0){
+      container.innerHTML=
+        '<div class="empty-orders">'+
+          '<i class="fas fa-box-open"></i>'+
+          '<h2>No orders found</h2>'+
+          '<p>You have no '+( currentFilter==='all'?'':''+currentFilter+' ')+'orders yet.</p>'+
+          '<a href="shop.html" class="btn btn-primary"><i class="fas fa-store"></i> Start Shopping</a>'+
+        '</div>';
+      return;
+    }
+
+    container.innerHTML = filtered.map(function(order, idx){
+      var chips = order.items.slice(0,4).map(function(it){
+        return '<div class="oi-chip"><img src="'+it.image+'" alt="'+it.name+'"/><span>'+it.name+(it.qty>1?' ×'+it.qty:'')+'</span></div>';
+      }).join('')+(order.items.length>4?'<div class="oi-chip"><span>+'+( order.items.length-4)+' more</span></div>':'');
+
+      return '<div class="order-card" style="animation-delay:'+(idx*80)+'ms">'+
+        '<div class="order-card-header">'+
+          '<div>'+
+            '<div class="order-id"><i class="fas fa-receipt" style="color:var(--accent);margin-right:6px"></i>'+order.id+'</div>'+
+            '<div class="order-date">'+order.date+' &nbsp;·&nbsp; '+order.items.length+' item'+(order.items.length!==1?'s':'')+'</div>'+
+          '</div>'+
+          '<span class="order-status '+statusClass(order.status)+'">'+statusLabel(order.status)+'</span>'+
+        '</div>'+
+        '<div class="order-items-preview">'+chips+'</div>'+
+        (order.status!=='cancelled'? trackHTML(order.status) : '')+
+        '<div class="order-card-footer">'+
+          '<div>'+
+            '<div class="order-total">₹'+order.total+'</div>'+
+            '<div style="font-size:0.78rem;color:var(--text3);margin-top:2px;"><i class="fas fa-map-marker-alt" style="color:var(--accent)"></i> '+order.address+'</div>'+
+          '</div>'+
+          '<div class="order-actions">'+
+            (order.status==='delivered'?'<button class="btn btn-outline btn-sm" onclick="reorder(\''+order.id+'\')"><i class="fas fa-redo"></i> Reorder</button>':'')+
+            '<button class="btn btn-ghost btn-sm" onclick="viewInvoice(\''+order.id+'\')"><i class="fas fa-file-invoice"></i> Invoice</button>'+
+            (order.status==='Processing'?'<button class="btn btn-danger btn-sm" onclick="cancelOrder(\''+order.id+'\')"><i class="fas fa-times"></i> Cancel</button>':'')+
+          '</div>'+
+        '</div>'+
+      '</div>';
+    }).join('');
+  }
+
+  // Tab switching
+  document.querySelectorAll('.otab').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('.otab').forEach(function(b){b.classList.remove('active');});
+      btn.classList.add('active');
+      currentFilter = btn.dataset.filter;
+      renderOrders();
+    });
+  });
+
+  window.reorder = function(orderId){
+    var orders = getOrders();
+    var order  = orders.find(function(o){return o.id===orderId;});
+    if(!order) return;
+    order.items.forEach(function(item){ addToCart(item.id); });
+    showToast('🛒 Items added to cart!','success');
+  };
+
+  window.cancelOrder = function(orderId){
+    var orders = getOrders();
+    var idx = orders.findIndex(function(o){return o.id===orderId;});
+    if(idx>-1){ orders[idx].status='cancelled'; localStorage.setItem('vegully_orders',JSON.stringify(orders)); }
+    showToast('Order cancelled','info');
+    renderOrders();
+  };
+
+  window.viewInvoice = function(orderId){
+    showToast('📄 Invoice for '+orderId+' downloading…','info');
+  };
+
+  renderOrders();
+})();
+</script>
+</body>
+</html>

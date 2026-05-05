@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vegully — Fresh Groceries Delivered Instantly</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+<!-- ════════ NAVBAR ════════ -->
+<nav class="navbar" id="navbar"></nav>
+<script src="data.js"></script>
+<script>renderNavbar('home');</script>
+
+
+<!-- ════════ HERO ════════ -->
+<section class="hero">
+  <div class="hero-bg">
+    <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=1800&auto=format&fit=crop&q=80" alt="Fresh vegetables" loading="lazy"/>
+    <div class="hero-overlay"></div>
+  </div>
+  <div class="hero-floats">
+    <div class="float-card fc1">🥑 Avocado <span>₹179</span></div>
+    <div class="float-card fc2">🍓 Strawberries <span>₹149</span></div>
+    <div class="float-card fc3">🥛 Organic Milk <span>₹75</span></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge">⚡ 10-Minute Delivery in Your City</div>
+    <h1 class="hero-title">
+      Farm <span class="grad-text">Fresh</span><br/>Groceries,<br/>at Lightning Speed
+    </h1>
+    <p class="hero-sub">Premium quality fruits, vegetables & daily essentials — sourced directly from farms, delivered to your door in minutes.</p>
+    <div class="hero-cta">
+      <a href="shop.html" class="btn btn-primary"><i class="fas fa-bolt"></i> Shop Now</a>
+      <a href="#categories" class="btn btn-ghost">Explore Categories</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><strong>50K+</strong><span>Happy Customers</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><strong>500+</strong><span>Products</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><strong>10 Min</strong><span>Avg. Delivery</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><strong>4.9 ★</strong><span>App Rating</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ MARQUEE ════════ -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span>🥦 Broccoli</span><span>🍅 Tomatoes</span><span>🥕 Carrots</span>
+    <span>🍋 Lemons</span><span>🧅 Onions</span><span>🥬 Spinach</span>
+    <span>🍇 Grapes</span><span>🥑 Avocado</span><span>🍓 Berries</span>
+    <span>🥛 Dairy</span><span>🌽 Corn</span><span>🍎 Apples</span>
+    <span>🥐 Croissants</span><span>☕ Cold Brew</span><span>🫐 Blueberries</span>
+    <span>🥦 Broccoli</span><span>🍅 Tomatoes</span><span>🥕 Carrots</span>
+    <span>🍋 Lemons</span><span>🧅 Onions</span><span>🥬 Spinach</span>
+    <span>🍇 Grapes</span><span>🥑 Avocado</span><span>🍓 Berries</span>
+    <span>🥛 Dairy</span><span>🌽 Corn</span><span>🍎 Apples</span>
+    <span>🥐 Croissants</span><span>☕ Cold Brew</span><span>🫐 Blueberries</span>
+  </div>
+</div>
+
+<!-- ════════ CATEGORIES ════════ -->
+<section class="section" id="categories">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-tag">Browse By</p>
+      <h2 class="section-title">Popular Categories</h2>
+    </div>
+    <div class="categories-grid">
+      <a href="shop.html?cat=fruits" class="cat-card scroll-reveal" style="--delay:0ms">
+        <div class="cat-img-wrap">
+          <img src="https://images.unsplash.com/photo-1619566636858-adf3ef46400b?w=400&auto=format&fit=crop&q=80" alt="Fruits" loading="lazy"/>
+        </div>
+        <div class="cat-info"><i class="fas fa-apple-alt"></i> Fruits</div>
+      </a>
+      <a href="shop.html?cat=vegetables" class="cat-card scroll-reveal" style="--delay:80ms">
+        <div class="cat-img-wrap">
+          <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?w=400&auto=format&fit=crop&q=80" alt="Vegetables" loading="lazy"/>
+        </div>
+        <div class="cat-info"><i class="fas fa-leaf"></i> Vegetables</div>
+      </a>
+      <a href="shop.html?cat=dairy" class="cat-card scroll-reveal" style="--delay:160ms">
+        <div class="cat-img-wrap">
+          <img src="https://images.unsplash.com/photo-1550583724-b2692b85b150?w=400&auto=format&fit=crop&q=80" alt="Dairy" loading="lazy"/>
+        </div>
+        <div class="cat-info"><i class="fas fa-cheese"></i> Dairy</div>
+      </a>
+      <a href="shop.html?cat=bakery" class="cat-card scroll-reveal" style="--delay:240ms">
+        <div class="cat-img-wrap">
+          <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&auto=format&fit=crop&q=80" alt="Bakery" loading="lazy"/>
+        </div>
+        <div class="cat-info"><i class="fas fa-bread-slice"></i> Bakery</div>
+      </a>
+      <a href="shop.html?cat=beverages" class="cat-card scroll-reveal" style="--delay:320ms">
+        <div class="cat-img-wrap">
+          <img src="https://images.unsplash.com/photo-1534353341901-bce5f6ce9c0d?w=400&auto=format&fit=crop&q=80" alt="Beverages" loading="lazy"/>
+        </div>
+        <div class="cat-info"><i class="fas fa-glass-water"></i> Beverages</div>
+      </a>
+      <a href="shop.html?cat=snacks" class="cat-card scroll-reveal" style="--delay:400ms">
+        <div class="cat-img-wrap">
+          <img src="https://images.unsplash.com/photo-1621939514649-280e2ee25f60?w=400&auto=format&fit=crop&q=80" alt="Snacks" loading="lazy"/>
+        </div>
+        <div class="cat-info"><i class="fas fa-cookie-bite"></i> Snacks</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ FEATURED PRODUCTS ════════ -->
+<section class="section section-alt" id="featured">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-tag">Handpicked For You</p>
+      <h2 class="section-title">Featured Products</h2>
+      <a href="shop.html" class="see-all">See All <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <!-- Skeleton loaders shown while page initialises -->
+    <div class="products-grid" id="featuredGrid">
+      <div class="skeleton-card"><div class="skeleton sk-img"></div><div class="sk-body"><div class="skeleton sk-line med"></div><div class="skeleton sk-line short"></div></div></div>
+      <div class="skeleton-card"><div class="skeleton sk-img"></div><div class="sk-body"><div class="skeleton sk-line med"></div><div class="skeleton sk-line short"></div></div></div>
+      <div class="skeleton-card"><div class="skeleton sk-img"></div><div class="sk-body"><div class="skeleton sk-line med"></div><div class="skeleton sk-line short"></div></div></div>
+      <div class="skeleton-card"><div class="skeleton sk-img"></div><div class="sk-body"><div class="skeleton sk-line med"></div><div class="skeleton sk-line short"></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ WHY VEGULLY ════════ -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-tag">Our Promise</p>
+      <h2 class="section-title">Why Choose Vegully?</h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-card scroll-reveal" style="--delay:0ms">
+        <span class="why-icon">⚡</span>
+        <h3>10-Min Delivery</h3>
+        <p>Ultra-fast delivery from our dark stores right to your doorstep — every single time, guaranteed.</p>
+      </div>
+      <div class="why-card scroll-reveal" style="--delay:100ms">
+        <span class="why-icon">🌿</span>
+        <h3>Farm Fresh</h3>
+        <p>Sourced directly from partner farms. Our produce arrives within 24 hours of harvest.</p>
+      </div>
+      <div class="why-card scroll-reveal" style="--delay:200ms">
+        <span class="why-icon">💎</span>
+        <h3>Premium Quality</h3>
+        <p>Every item passes our rigorous quality inspection before it ever reaches your cart.</p>
+      </div>
+      <div class="why-card scroll-reveal" style="--delay:300ms">
+        <span class="why-icon">🔒</span>
+        <h3>Safe & Secure</h3>
+        <p>End-to-end encrypted transactions with multiple safe payment options for peace of mind.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ PROMO BANNER ════════ -->
+<section class="promo-banner">
+  <div class="container">
+    <div class="promo-inner scroll-reveal">
+      <div class="promo-text">
+        <h2>Get 20% off your first order</h2>
+        <p>Use code <strong>VEGULLY20</strong> at checkout. Fresh savings, fresh food — every single day in 2026.</p>
+        <a href="shop.html" class="btn btn-primary">Claim Offer <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="promo-img">
+        <img src="https://images.unsplash.com/photo-1610348725531-843dff563e2c?w=600&auto=format&fit=crop&q=80" alt="Fresh produce basket" loading="lazy"/>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ FOOTER ════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><span class="logo-icon">🥦</span>Vegully</div>
+        <p>Your premium grocery partner. Fresh produce, lightning-fast delivery, every day in 2026.</p>
+        <div class="socials">
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="shop.html">Shop</a></li>
+          <li><a href="cart.html">Cart</a></li>
+          <li><a href="orders.html">My Orders</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Categories</h4>
+        <ul>
+          <li><a href="shop.html?cat=fruits">Fruits</a></li>
+          <li><a href="shop.html?cat=vegetables">Vegetables</a></li>
+          <li><a href="shop.html?cat=dairy">Dairy</a></li>
+          <li><a href="shop.html?cat=bakery">Bakery</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Vegully. All rights reserved. Made with ❤️ for fresh living.</p>
+    </div>
+  </div>
+</footer>
+
+<div class="toast-container" id="toastContainer"></div>
+
+
+<script>
+  // Render featured products after a brief skeleton delay
+  setTimeout(function(){
+    var grid = document.getElementById('featuredGrid');
+    grid.innerHTML = '';
+    var featured = PRODUCTS.slice(0,8);
+    featured.forEach(function(p,i){ grid.innerHTML += productCardHTML(p, i*70); });
+    initScrollAnimations();
+  }, 600);
+</script>
+</body>
+</html>

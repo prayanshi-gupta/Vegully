@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wishlist — Vegully</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    .wish-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:24px;padding:60px 0 80px;}
+    .wish-card{background:var(--surface);border-radius:var(--radius-lg);border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow-sm);transition:var(--t);position:relative;animation:fadeSlideUp 0.5s var(--ease) both;}
+    .wish-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);border-color:rgba(var(--accent-rgb),0.3);}
+    .wish-remove{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;background:rgba(239,68,68,0.10);border:1px solid rgba(239,68,68,0.25);display:flex;align-items:center;justify-content:center;color:var(--red);cursor:pointer;transition:var(--t);z-index:2;}
+    .wish-remove:hover{background:var(--red);color:#fff;}
+    .wish-img{height:200px;overflow:hidden;background:var(--bg2);}
+    .wish-img img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s var(--ease);}
+    .wish-card:hover .wish-img img{transform:scale(1.08);}
+    .wish-info{padding:16px;}
+    .wish-cat{font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--accent);font-weight:700;}
+    .wish-name{font-family:var(--font-h);font-size:0.98rem;font-weight:700;margin:6px 0 8px;line-height:1.3;}
+    .wish-foot{display:flex;align-items:center;justify-content:space-between;}
+    .wish-price{font-family:var(--font-h);font-size:1.15rem;font-weight:800;color:var(--accent);}
+    .empty-wish{text-align:center;padding:100px 20px;}
+    .empty-wish i{font-size:4rem;color:var(--red);display:block;margin-bottom:20px;opacity:0.4;}
+    .empty-wish h2{font-family:var(--font-h);margin-bottom:12px;}
+    .empty-wish p{color:var(--text2);margin-bottom:28px;}
+    .wish-header-row{display:flex;align-items:center;justify-content:space-between;padding-top:60px;flex-wrap:wrap;gap:12px;}
+    .wish-header-row h2{font-family:var(--font-h);font-size:1.4rem;font-weight:800;}
+  </style>
+</head>
+<body>
+
+<!-- ════════ NAVBAR ════════ -->
+<nav class="navbar" id="navbar"></nav>
+<script src="data.js"></script>
+<script>renderNavbar('wishlist');</script>
+
+<div class="page-header">
+  <div class="container">
+    <h1>My <span class="grad-text">Wishlist</span></h1>
+    <p>Products you love — saved for later.</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="wish-header-row">
+    <h2 id="wishTitle">0 saved items</h2>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="btn btn-outline btn-sm" onclick="addAllToCart()"><i class="fas fa-cart-plus"></i> Add All to Cart</button>
+      <button class="btn btn-danger btn-sm" onclick="clearWishlist()"><i class="fas fa-trash"></i> Clear All</button>
+    </div>
+  </div>
+  <div class="wish-grid" id="wishGrid"></div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand"><div class="logo"><span class="logo-icon">🥦</span>Vegully</div><p>Your premium grocery partner. Fresh produce, lightning-fast delivery, every day in 2026.</p><div class="socials"><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-twitter"></i></a><a href="#"><i class="fab fa-facebook"></i></a></div></div>
+      <div class="footer-links"><h4>Quick Links</h4><ul><li><a href="index.html">Home</a></li><li><a href="shop.html">Shop</a></li><li><a href="orders.html">My Orders</a></li><li><a href="profile.html">Profile</a></li></ul></div>
+      <div class="footer-links"><h4>Categories</h4><ul><li><a href="shop.html?cat=fruits">Fruits</a></li><li><a href="shop.html?cat=vegetables">Vegetables</a></li><li><a href="shop.html?cat=dairy">Dairy</a></li><li><a href="shop.html?cat=bakery">Bakery</a></li></ul></div>
+      <div class="footer-links"><h4>Support</h4><ul><li><a href="#">Help Center</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li><li><a href="vendors.html">Our Vendors</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 Vegully. All rights reserved. Made with ❤️ for fresh living.</p></div>
+  </div>
+</footer>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+// ── Wishlist helpers ──
+function getWishlist(){ try{return JSON.parse(localStorage.getItem('vegully_wishlist')||'[]');}catch(e){return[];} }
+function saveWishlist(w){ localStorage.setItem('vegully_wishlist',JSON.stringify(w)); }
+function isWishlisted(id){ return getWishlist().includes(id); }
+function toggleWishlist(id){
+  var w=getWishlist();
+  var idx=w.indexOf(id);
+  if(idx>-1){ w.splice(idx,1); showToast('Removed from wishlist','info'); }
+  else{ w.push(id); showToast('❤️ Added to wishlist!','success'); }
+  saveWishlist(w);
+}
+
+function renderWishlist(){
+  var ids  = getWishlist();
+  var grid = document.getElementById('wishGrid');
+  var title= document.getElementById('wishTitle');
+  title.textContent = ids.length+' saved item'+(ids.length!==1?'s':'');
+
+  if(ids.length===0){
+    grid.innerHTML='<div class="empty-wish" style="grid-column:1/-1">'+
+      '<i class="fas fa-heart"></i>'+
+      '<h2>Your wishlist is empty</h2>'+
+      '<p>Browse our store and tap the ❤️ on any product to save it here.</p>'+
+      '<a href="shop.html" class="btn btn-primary"><i class="fas fa-store"></i> Explore Products</a>'+
+    '</div>';
+    return;
+  }
+
+  var products = ids.map(function(id){return PRODUCTS.find(function(p){return p.id===id;});}).filter(Boolean);
+  grid.innerHTML = products.map(function(p,i){
+    var stars='★'.repeat(Math.floor(p.rating))+(p.rating%1>=0.5?'½':'');
+    return '<div class="wish-card" style="animation-delay:'+(i*70)+'ms">'+
+      '<button class="wish-remove" onclick="removeFromWish('+p.id+')" title="Remove"><i class="fas fa-times"></i></button>'+
+      '<div class="wish-img"><img src="'+p.image+'" alt="'+p.name+'" loading="lazy"/></div>'+
+      '<div class="wish-info">'+
+        '<span class="wish-cat">'+p.category+'</span>'+
+        '<div class="wish-name">'+p.name+'</div>'+
+        '<div style="font-size:0.78rem;color:#f59e0b;margin-bottom:10px;">'+stars+' '+p.rating+' &nbsp; <span style="color:var(--text3);">'+p.unit+'</span></div>'+
+        '<div class="wish-foot">'+
+          '<span class="wish-price">₹'+p.price+'</span>'+
+          '<button class="btn-add" onclick="addToCart('+p.id+')"><i class="fas fa-cart-plus"></i> Add</button>'+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+
+window.removeFromWish = function(id){
+  var w=getWishlist(); var idx=w.indexOf(id);
+  if(idx>-1){ w.splice(idx,1); saveWishlist(w); }
+  showToast('Removed from wishlist','info');
+  renderWishlist();
+};
+window.addAllToCart = function(){
+  var ids=getWishlist();
+  if(!ids.length){ showToast('Wishlist is empty','info'); return; }
+  ids.forEach(function(id){ addToCart(id); });
+  showToast('🛒 All items added to cart!','success');
+};
+window.clearWishlist = function(){
+  saveWishlist([]);
+  renderWishlist();
+  showToast('Wishlist cleared','info');
+};
+
+// Seed wishlist with a few demo items
+if(!localStorage.getItem('vegully_wishlist')){
+  saveWishlist([1,4,18,27,31]);
+}
+renderWishlist();
+</script>
+</body>
+</html>

@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Checkout — Vegully</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    /* ── extra checkout styles ── */
+    .progress-bar{display:flex;align-items:center;justify-content:center;gap:0;margin:32px 0 48px;padding:0 20px;}
+    .prog-step{display:flex;flex-direction:column;align-items:center;gap:6px;position:relative;flex:1;max-width:160px;}
+    .prog-circle{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.85rem;font-weight:700;border:2px solid var(--border);background:var(--surface);color:var(--text3);transition:var(--t);z-index:1;}
+    .prog-step.done .prog-circle{background:var(--grad);color:#fff;border-color:var(--accent);box-shadow:var(--shadow-acc);}
+    .prog-step.active .prog-circle{background:var(--grad);color:#fff;border-color:var(--accent);box-shadow:var(--shadow-acc);}
+    .prog-label{font-size:0.72rem;font-weight:600;color:var(--text3);text-align:center;}
+    .prog-step.done .prog-label,.prog-step.active .prog-label{color:var(--accent);}
+    .prog-line{flex:1;height:2px;background:var(--border);margin:0 -4px;margin-bottom:22px;transition:background 0.4s;}
+    .prog-line.done{background:var(--accent);}
+    .order-summary-sticky{background:var(--surface);border-radius:var(--radius-lg);border:1px solid var(--border);padding:28px;height:fit-content;position:sticky;top:88px;box-shadow:var(--shadow-sm);}
+    .order-summary-sticky h3{font-family:var(--font-h);font-size:1.05rem;font-weight:700;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+    .ckout-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);}
+    .ckout-item:last-of-type{border-bottom:none;}
+    .ckout-img{width:52px;height:52px;border-radius:var(--radius-sm);overflow:hidden;flex-shrink:0;background:var(--bg2);}
+    .ckout-img img{width:100%;height:100%;object-fit:cover;}
+    .ckout-info{flex:1;min-width:0;}
+    .ckout-name{font-size:0.85rem;font-weight:600;line-height:1.3;}
+    .ckout-qty{font-size:0.75rem;color:var(--text3);}
+    .ckout-price{font-weight:700;font-size:0.92rem;color:var(--accent);white-space:nowrap;}
+    .ckout-totals{margin-top:16px;padding-top:16px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:10px;}
+    .ckout-row{display:flex;justify-content:space-between;font-size:0.88rem;}
+    .ckout-row.grand{font-family:var(--font-h);font-weight:800;font-size:1.08rem;color:var(--accent);}
+    .form-note{font-size:0.8rem;color:var(--text3);margin-top:4px;}
+    .pay-opts-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;}
+    @media(max-width:600px){.pay-opts-grid{grid-template-columns:1fr;}}
+    .delivery-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(39,168,90,0.10);color:var(--accent);padding:10px 18px;border-radius:99px;font-size:0.85rem;font-weight:600;margin-bottom:24px;border:1px solid rgba(39,168,90,0.25);}
+  </style>
+</head>
+<body>
+
+<!-- ════════ NAVBAR ════════ -->
+<nav class="navbar" id="navbar"></nav>
+<script src="data.js"></script>
+<script>renderNavbar('checkout');</script>
+
+
+<!-- ════════ PAGE HEADER ════════ -->
+<div class="page-header">
+  <div class="container">
+    <h1>Secure <span class="grad-text">Checkout</span></h1>
+    <p>You're just a few steps away from fresh goodness.</p>
+  </div>
+</div>
+
+<!-- ════════ PROGRESS BAR ════════ -->
+<div class="container">
+  <div class="progress-bar">
+    <div class="prog-step done">
+      <div class="prog-circle"><i class="fas fa-check"></i></div>
+      <div class="prog-label">Cart</div>
+    </div>
+    <div class="prog-line done"></div>
+    <div class="prog-step active">
+      <div class="prog-circle">2</div>
+      <div class="prog-label">Delivery</div>
+    </div>
+    <div class="prog-line"></div>
+    <div class="prog-step">
+      <div class="prog-circle">3</div>
+      <div class="prog-label">Payment</div>
+    </div>
+    <div class="prog-line"></div>
+    <div class="prog-step">
+      <div class="prog-circle">4</div>
+      <div class="prog-label">Confirm</div>
+    </div>
+  </div>
+
+  <!-- ════════ CHECKOUT LAYOUT ════════ -->
+  <div class="checkout-layout">
+
+    <!-- LEFT: FORM -->
+    <div class="checkout-form-wrap">
+
+      <!-- Delivery Info -->
+      <div class="form-section">
+        <div class="step-header">
+          <div class="step-num">1</div>
+          <h2>Delivery Information</h2>
+        </div>
+        <div class="delivery-badge"><i class="fas fa-bolt"></i> Estimated delivery: 10–15 minutes</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>First Name *</label>
+            <input type="text" id="firstName" placeholder="Arjun" required/>
+          </div>
+          <div class="form-group">
+            <label>Last Name *</label>
+            <input type="text" id="lastName" placeholder="Sharma" required/>
+          </div>
+          <div class="form-group">
+            <label>Email Address *</label>
+            <input type="email" id="email" placeholder="arjun@email.com" required/>
+          </div>
+          <div class="form-group">
+            <label>Phone Number *</label>
+            <input type="tel" id="phone" placeholder="+91 98765 43210" required/>
+          </div>
+          <div class="form-group full">
+            <label>Flat / House No. & Building *</label>
+            <input type="text" id="address1" placeholder="Flat 4B, Sunrise Apartments" required/>
+          </div>
+          <div class="form-group full">
+            <label>Street / Area / Locality *</label>
+            <input type="text" id="address2" placeholder="MG Road, Indiranagar" required/>
+          </div>
+          <div class="form-group">
+            <label>City *</label>
+            <input type="text" id="city" placeholder="Bangalore" required/>
+          </div>
+          <div class="form-group">
+            <label>Pincode *</label>
+            <input type="text" id="pincode" placeholder="560038" required/>
+          </div>
+          <div class="form-group full">
+            <label>Delivery Instructions (optional)</label>
+            <textarea id="instructions" rows="2" placeholder="e.g. Leave at door, call before delivery…" style="resize:vertical;padding:13px 16px;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:var(--bg);color:var(--text);font-size:0.92rem;transition:var(--t);"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <!-- Payment -->
+      <div class="form-section">
+        <div class="step-header">
+          <div class="step-num">2</div>
+          <h2>Payment Method</h2>
+        </div>
+        <p class="form-note" style="margin-bottom:14px;font-size:0.88rem;color:var(--text2);">All transactions are 256-bit SSL encrypted and completely secure.</p>
+        <div class="pay-opts-grid" id="payOpts">
+          <div class="pay-opt selected" data-pay="upi">
+            <input type="radio" name="pay" checked/>
+            <i class="fas fa-mobile-alt"></i>
+            <span>UPI / GPay</span>
+          </div>
+          <div class="pay-opt" data-pay="card">
+            <input type="radio" name="pay"/>
+            <i class="fas fa-credit-card"></i>
+            <span>Credit / Debit Card</span>
+          </div>
+          <div class="pay-opt" data-pay="netbanking">
+            <input type="radio" name="pay"/>
+            <i class="fas fa-university"></i>
+            <span>Net Banking</span>
+          </div>
+          <div class="pay-opt" data-pay="cod">
+            <input type="radio" name="pay"/>
+            <i class="fas fa-money-bill-wave"></i>
+            <span>Cash on Delivery</span>
+          </div>
+        </div>
+
+        <!-- Card fields (shown when Card selected) -->
+        <div id="cardFields" style="display:none;margin-top:20px;">
+          <div class="form-grid">
+            <div class="form-group full">
+              <label>Card Number</label>
+              <input type="text" id="cardNum" placeholder="1234 5678 9012 3456" maxlength="19"/>
+            </div>
+            <div class="form-group">
+              <label>Expiry</label>
+              <input type="text" id="cardExp" placeholder="MM / YY" maxlength="7"/>
+            </div>
+            <div class="form-group">
+              <label>CVV</label>
+              <input type="text" id="cardCvv" placeholder="•••" maxlength="3"/>
+            </div>
+            <div class="form-group full">
+              <label>Name on Card</label>
+              <input type="text" id="cardName" placeholder="ARJUN SHARMA"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- UPI field -->
+        <div id="upiField" style="margin-top:20px;">
+          <div class="form-group">
+            <label>UPI ID</label>
+            <input type="text" id="upiId" placeholder="yourname@upi"/>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <!-- Place Order Button -->
+      <button class="btn btn-primary" id="placeOrderBtn" style="width:100%;justify-content:center;font-size:1.05rem;padding:16px;">
+        <i class="fas fa-lock"></i> Place Order
+      </button>
+      <p style="text-align:center;font-size:0.78rem;color:var(--text3);margin-top:12px;">
+        <i class="fas fa-shield-alt"></i> By placing your order you agree to our <a href="#" style="color:var(--accent)">Terms of Service</a> and <a href="#" style="color:var(--accent)">Privacy Policy</a>.
+      </p>
+    </div>
+
+    <!-- RIGHT: ORDER SUMMARY -->
+    <div class="order-summary-sticky" id="orderSummaryPanel">
+      <h3>Order Summary</h3>
+      <div id="summaryItems"></div>
+      <div class="ckout-totals" id="summaryTotals"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════ FOOTER ════════ -->
+<footer class="footer" style="margin-top:60px">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><span class="logo-icon">🥦</span>Vegully</div>
+        <p>Your premium grocery partner. Fresh produce, lightning-fast delivery, every day in 2026.</p>
+        <div class="socials">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <ul><li><a href="index.html">Home</a></li><li><a href="shop.html">Shop</a></li><li><a href="orders.html">My Orders</a></li><li><a href="profile.html">Profile</a></li></ul>
+      </div>
+      <div class="footer-links">
+        <h4>Support</h4>
+        <ul><li><a href="#">Help Center</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li><li><a href="#">Contact Us</a></li></ul>
+      </div>
+      <div class="footer-links">
+        <h4>Categories</h4>
+        <ul><li><a href="shop.html?cat=fruits">Fruits</a></li><li><a href="shop.html?cat=vegetables">Vegetables</a></li><li><a href="shop.html?cat=dairy">Dairy</a></li><li><a href="shop.html?cat=bakery">Bakery</a></li></ul>
+      </div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 Vegully. All rights reserved. Made with ❤️ for fresh living.</p></div>
+  </div>
+</footer>
+
+<!-- ════════ ORDER PLACED OVERLAY ════════ -->
+<div class="order-placed-overlay" id="orderOverlay">
+  <div class="order-placed-box">
+    <div class="order-checkmark"><i class="fas fa-check"></i></div>
+    <h2>Order Placed! 🎉</h2>
+    <p style="font-size:1rem;font-weight:600;color:var(--text);margin-bottom:6px;" id="overlayOrderId"></p>
+    <p>Your fresh groceries are being packed and will reach you in <strong style="color:var(--accent)">10–15 minutes</strong>.</p>
+    <p style="margin-top:8px;font-size:0.85rem;color:var(--text3);">A confirmation has been sent to your email.</p>
+    <div style="display:flex;gap:12px;justify-content:center;margin-top:28px;flex-wrap:wrap;">
+      <a href="orders.html" class="btn btn-primary"><i class="fas fa-box"></i> Track Order</a>
+      <a href="shop.html" class="btn btn-ghost"><i class="fas fa-store"></i> Continue Shopping</a>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+(function(){
+  // ── Redirect if cart empty ──
+  var cart = getCart();
+  if(cart.length === 0){
+    document.querySelector('.checkout-layout').innerHTML =
+      '<div style="text-align:center;padding:60px 20px;grid-column:1/-1;">' +
+        '<i class="fas fa-shopping-basket" style="font-size:3rem;color:var(--text3);display:block;margin-bottom:16px;"></i>' +
+        '<h2 style="font-family:var(--font-h);margin-bottom:12px;">Your cart is empty</h2>' +
+        '<a href="shop.html" class="btn btn-primary"><i class="fas fa-store"></i> Shop Now</a>' +
+      '</div>';
+    return;
+  }
+
+  // ── Render order summary ──
+  function renderSummary(){
+    var items  = getCart();
+    var sub    = getCartTotal();
+    var del    = sub >= 499 ? 0 : 29;
+    var tax    = Math.round(sub * 0.05);
+    var total  = sub + del + tax;
+
+    document.getElementById('summaryItems').innerHTML = items.map(function(i){
+      return '<div class="ckout-item">' +
+        '<div class="ckout-img"><img src="'+i.image+'" alt="'+i.name+'" loading="lazy"/></div>' +
+        '<div class="ckout-info"><div class="ckout-name">'+i.name+'</div><div class="ckout-qty">Qty: '+i.qty+' × ₹'+i.price+'</div></div>' +
+        '<div class="ckout-price">₹'+(i.price*i.qty)+'</div>' +
+      '</div>';
+    }).join('');
+
+    document.getElementById('summaryTotals').innerHTML =
+      '<div class="ckout-row"><span>Subtotal</span><span>₹'+sub+'</span></div>' +
+      '<div class="ckout-row"><span>Delivery</span><span>'+(del===0?'<span style="color:var(--accent);font-weight:700">FREE</span>':'₹'+del)+'</span></div>' +
+      '<div class="ckout-row"><span>Tax (5%)</span><span>₹'+tax+'</span></div>' +
+      '<div class="ckout-row grand"><span>Total</span><span>₹'+total+'</span></div>';
+  }
+  renderSummary();
+
+  // ── Payment option switching ──
+  document.getElementById('payOpts').querySelectorAll('.pay-opt').forEach(function(opt){
+    opt.addEventListener('click',function(){
+      document.querySelectorAll('.pay-opt').forEach(function(o){o.classList.remove('selected');});
+      opt.classList.add('selected');
+      var method = opt.dataset.pay;
+      document.getElementById('cardFields').style.display = method==='card' ? 'block' : 'none';
+      document.getElementById('upiField').style.display   = method==='upi'  ? 'block' : 'none';
+    });
+  });
+
+  // ── Card number formatting ──
+  var cardNum = document.getElementById('cardNum');
+  if(cardNum){
+    cardNum.addEventListener('input',function(){
+      var v = this.value.replace(/\D/g,'').substring(0,16);
+      this.value = v.replace(/(.{4})/g,'$1 ').trim();
+    });
+  }
+  var cardExp = document.getElementById('cardExp');
+  if(cardExp){
+    cardExp.addEventListener('input',function(){
+      var v = this.value.replace(/\D/g,'').substring(0,4);
+      if(v.length>=2) v = v.substring(0,2)+' / '+v.substring(2);
+      this.value = v;
+    });
+  }
+
+  // ── Validate ──
+  function validate(){
+    var required = ['firstName','lastName','email','phone','address1','address2','city','pincode'];
+    for(var i=0;i<required.length;i++){
+      var el = document.getElementById(required[i]);
+      if(!el || !el.value.trim()){
+        el.focus();
+        el.style.borderColor='var(--red)';
+        el.style.boxShadow='0 0 0 4px rgba(239,68,68,0.12)';
+        setTimeout(function(e){ return function(){ e.style.borderColor=''; e.style.boxShadow=''; }; }(el), 2000);
+        showToast('⚠️ Please fill all required fields','error');
+        return false;
+      }
+    }
+    var emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if(!emailRx.test(document.getElementById('email').value)){
+      showToast('⚠️ Please enter a valid email address','error');
+      return false;
+    }
+    return true;
+  }
+
+  // ── Place Order ──
+  document.getElementById('placeOrderBtn').addEventListener('click',function(){
+    if(!validate()) return;
+    var btn = this;
+    btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Processing…';
+    btn.disabled = true;
+
+    setTimeout(function(){
+      var orderId = 'VG-'+Date.now().toString().slice(-6);
+      var order = {
+        id: orderId,
+        date: new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}),
+        items: getCart(),
+        total: getCartTotal() + (getCartTotal()>=499?0:29) + Math.round(getCartTotal()*0.05),
+        status: 'Processing',
+        address: document.getElementById('address1').value + ', ' + document.getElementById('city').value
+      };
+      saveOrder(order);
+      saveCart([]);
+      updateCartBadge();
+
+      document.getElementById('overlayOrderId').textContent = 'Order ID: '+orderId;
+      document.getElementById('orderOverlay').classList.add('show');
+      btn.innerHTML='<i class="fas fa-lock"></i> Place Order';
+      btn.disabled=false;
+    },2000);
+  });
+
+})();
+</script>
+</body>
+</html>
